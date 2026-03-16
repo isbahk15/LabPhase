@@ -8,21 +8,28 @@ import farmerImg from '../assets/farmer.jpg';
 
 const Landing = () => {
   const navigate = useNavigate();
+//this is for good UI
+// the shopbtn allows the user to see the "back to the top" arrow
+
   const [showTopBtn, setShowTopBtn] = useState(false);
   
   // Form State for Email Inquiry
+  //we use a single state call instead og 4 different ones
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "General Inquiry",
     message: ""
   });
+  //this inactivates the submoit button to prevent multiple clicks
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setShowTopBtn(window.scrollY > 400);
     };
+    //this is to make the back to the top button disappear when a user reaches the top of the page
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -30,22 +37,25 @@ const Landing = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+  //this allows smooth flow of transitioning
 
   // Logic to handle the Email Form Submission
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    //this prevents a screen refresh
+    setLoading(true); //this shows a notification based on success or failure
 
     try {
       // Hits your backend route directly from the home page
       await axios.post("http://localhost:5000/api/contacts", formData);
       toast.success("Message sent! We'll get back to you via email.");
+      //this notfifies a user their request was a success
       setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });
     } catch (err) {
       console.error("Submission error:", err);
       toast.error("Failed to send. Please check your connection.");
     } finally {
-      setLoading(false);
+      setLoading(false); //makes the submit button available again
     }
   };
 
@@ -55,6 +65,7 @@ const Landing = () => {
       <Navbar />
 
       {/* --- HERO SECTION --- */}
+      {/* uses a background image of a farmer that fades into the background to enable the text to still be shown while the image is displayed */}
       <header style={heroContainer}>
         <div style={heroContent}>
           <h1 style={heroTitle}>
@@ -71,6 +82,7 @@ const Landing = () => {
       </header>
 
       {/* --- STATS SECTION --- */}
+      {/* this is to show agroloops success as a  business making change */}
       <section style={statsSection}>
         <div style={statCard}><h3 style={statNum}>100%</h3><p style={statLabel}>Sustainable Focused</p></div>
         <div style={statCard}><h3 style={statNum}>Verified</h3><p style={statLabel}>Merchant Network</p></div>
@@ -87,7 +99,7 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* --- UPDATED CONTACT SECTION: Form Instead of WhatsApp --- */}
+      {/* --- this is the contact section to enable communication --- */}
       <section id="contact-us" style={contactSection}>
         <div style={contactContainer}>
           <h2 style={aboutTitle}>Get In Touch</h2>
@@ -131,7 +143,7 @@ const Landing = () => {
           </div>
         </div>
       </section>
-
+{/* this is the smooth back to the top button */}
       {showTopBtn && (
         <button onClick={scrollToTop} style={backToTopStyle}>↑</button>
       )}
@@ -143,7 +155,8 @@ const Landing = () => {
   );
 };
 
-// --- STYLES (Updated to include form styles) ---
+// --- STYLES  ---
+//this is styling to provide consistency
 const pageStyle = { backgroundColor: '#062c1d', minHeight: '100vh', color: 'white', fontFamily: 'sans-serif', overflowX: 'hidden', scrollBehavior: 'smooth' };
 const heroContainer = { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '85vh', textAlign: 'center', padding: '60px 20px', backgroundImage: `linear-gradient(rgba(6, 44, 29, 0.8), rgba(6, 44, 29, 0.95)), url(${farmerImg})`, backgroundSize: 'cover', backgroundPosition: 'center' };
 const heroContent = { maxWidth: '900px', width: '100%' };

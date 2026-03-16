@@ -7,35 +7,39 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+// this sends user details to the backend to see if a match is found
   const handleLogin = async (e) => {
     e.preventDefault();
+    //prevents a refresh
+    //POST request is sent to an authentication endpoint
     try {
       const response = await axios.post("http://localhost:5000/api/auth/login", {
         email,
         password,
       });
-
+// to check if the server returns  a valid JWT Authentication
       if (response.data.token) {
         // 1. Save Token
         localStorage.setItem("token", response.data.token);
         
         /** * 2. Save Role 
-         * If your backend doesn't send a role yet, you can default it to 'client'
-         * for testing: localStorage.setItem("role", "client");
+         checks whether a user is a merchant or a client
          **/
         const role = response.data.role || "client"; 
         localStorage.setItem("role", role);
         
         // 3. Navigate
+        //redirects a user to the marketplace page when logged in successfully
+
         navigate("/marketplace");
         
-        // Use a small delay or location.reload to ensure Navbar updates
+        // the navbar refreshes to show that logout button as the user is now logged in
         window.location.reload(); 
       }
     } catch (err) {
       console.error("Login failed:", err);
       alert("Invalid email or password. Please try again.");
+    //this is what shows up if the details dont match the backend of authorsied users
     }
   };
 
@@ -50,6 +54,7 @@ const Login = () => {
           <form onSubmit={handleLogin} style={formStyle}>
             <div style={inputGroup}>
               <label style={labelStyle}>Email Address</label>
+              {/* this is to enter the email */}
               <input 
                 type="email" 
                 style={inputStyle} 
@@ -57,6 +62,7 @@ const Login = () => {
                 required
               />
             </div>
+            {/* to enter the password */}
 
             <div style={inputGroup}>
               <label style={labelStyle}>Password</label>
@@ -67,12 +73,12 @@ const Login = () => {
                 required
               />
             </div>
-
+{/* to sign in */}
             <button type="submit" style={buttonStyle}>
               SIGN IN
             </button>
           </form>
-
+{/* a regustration button to create a new account */}
           <p style={footerText}>
             Don't have an account? <Link to="/register" style={linkStyle}>Register here</Link>
           </p>
@@ -83,6 +89,7 @@ const Login = () => {
 };
 
 // --- STYLES ---
+//styling with the consistent color scheme and visuals
 const pageStyle = { backgroundColor: '#062c1d', minHeight: '100vh', color: 'white', fontFamily: 'sans-serif' };
 const container = { display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '100px', paddingBottom: '50px' };
 const loginBox = { background: 'rgba(255, 255, 255, 0.03)', padding: '50px', borderRadius: '24px 4px', border: '1px solid rgba(233, 237, 201, 0.1)', width: '90%', maxWidth: '450px', textAlign: 'center' };

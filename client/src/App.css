@@ -40,3 +40,36 @@
 .read-the-docs {
   color: #888;
 }
+.dash-row:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.delete-btn-aesthetic:hover {
+  background-color: #ff6b6b !important;
+  color: white !important;
+  transform: scale(1.05);
+}
+
+/* For your Modal Inputs */
+
+.dash-row:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.delete-btn-aesthetic:hover {
+  background-color: #ff6b6b !important;
+  color: white !important;
+}
+
+.auth-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(233, 237, 201, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: #a7c957;
+}

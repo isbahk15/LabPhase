@@ -4,17 +4,19 @@ import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 
 const Marketplace = () => {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([]);//an array to hold the fetched listings
+  const [loading, setLoading] = useState(true);//to check if data is still being downloaded
 
   useEffect(() => {
     const fetchListings = async () => {
       try {
         const token = localStorage.getItem('token');
+        //this allows only authorised t=user to access the marektplace
         const res = await axios.get('http://localhost:5000/api/listings', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setItems(res.data);
+
+        setItems(res.data);//updates the state with the back end data
         setLoading(false);
       } catch (err) {
         console.error("Error fetching marketplace data", err);
@@ -23,7 +25,7 @@ const Marketplace = () => {
     };
     fetchListings();
   }, []);
-
+//this is my UI to help match strings to emojis
   const getCategoryIcon = (cat) => {
     if (cat === 'Seed') return '🌾';
     if (cat === 'Tool') return '🚜';
@@ -31,22 +33,24 @@ const Marketplace = () => {
   };
 
   // --- WhatsApp Contact Logic ---
+
+  //this is my contact directly section for users to communicate with sellers
   const handleContact = (item) => {
     const phoneNumber = "233XXXXXXXXX"; // Replace with your actual merchant phone number
     const message = `Hello! I am interested in buying ${item.weight} tons of ${item.name} for ${item.price} GHS. Is it still available?`;
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    
+    //this opens whatsapp in a new tab on the browser
     window.open(whatsappUrl, '_blank');
   };
 
   if (loading) return <div style={msgStyle}>Loading Marketplace...</div>;
-
+//this signals that the data fetching is in the works
   return (
     <div style={pageStyle}>
       <Navbar />
       <div style={container}>
         <h1 style={title}>Agricultural Marketplace</h1>
-        
+        {/* this is to ensure the app fits on a variety if different screen sizes */}
         <div style={grid}>
           {items.map(item => (
             <div key={item._id} style={card}>
@@ -58,7 +62,7 @@ const Marketplace = () => {
                 <span style={badge}>{item.category}</span>
                 <h3 style={itemTitle}>{item.name}</h3>
                 <p style={priceText}>{item.price} GHS</p>
-                
+                {/* this are the action buttons to do a "task" */}
                 <div style={actionRow}>
                   <Link to={`/product/${item._id}`} style={detailsLink}>View Info</Link>
                   <button onClick={() => handleContact(item)} style={contactBtn}>
@@ -75,10 +79,12 @@ const Marketplace = () => {
 };
 
 // --- STYLES ---
+//this continues to apply the agroloop theme 
 const pageStyle = { backgroundColor: '#062c1d', minHeight: '100vh', color: 'white' };
 const container = { padding: '40px 5%', maxWidth: '1200px', margin: '0 auto' };
 const msgStyle = { color: 'white', textAlign: 'center', marginTop: '50px' };
 const title = { fontFamily: 'serif', marginBottom: '30px', color: '#e9edc9' };
+// this enusures the cards are perfectly sized
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '25px' };
 const card = { background: '#052317', borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(233,237,201,0.1)' };
 const iconHeader = { height: '120px', background: 'rgba(233, 237, 201, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' };

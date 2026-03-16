@@ -74,10 +74,7 @@ const Landing = () => {
           <p style={heroSub}>
             Closing the loop between surplus materials and the farmers who need them most.
           </p>
-          <div style={btnGroup}>
-            <button style={unifiedBtnStyle} onClick={() => navigate('/register')}>Start Selling</button>
-            <button style={unifiedBtnStyle} onClick={() => navigate('/marketplace')}>Browse Materials</button>
-          </div>
+          
         </div>
       </header>
 

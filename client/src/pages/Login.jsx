@@ -7,39 +7,37 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-// this sends user details to the backend to see if a match is found
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    //prevents a refresh
-    //POST request is sent to an authentication endpoint
     try {
       const response = await axios.post("http://localhost:5000/api/auth/login", {
         email,
         password,
       });
-// to check if the server returns  a valid JWT Authentication
+
       if (response.data.token) {
-        // 1. Save Token
+      // to check if the server returns  a valid JWT Authentication
         localStorage.setItem("token", response.data.token);
         
-        /** * 2. Save Role 
+       /** * 2. Save Role
+
          checks whether a user is a merchant or a client
+
          **/
+        // If the backend doesn't send a role yet, it defaults to client
         const role = response.data.role || "client"; 
         localStorage.setItem("role", role);
         
-        // 3. Navigate
-        //redirects a user to the marketplace page when logged in successfully
-
+        // 3. Navigation & Refresh
         navigate("/marketplace");
-        
-        // the navbar refreshes to show that logout button as the user is now logged in
+           // the navbar refreshes to show that logout button as the user is now logged in
         window.location.reload(); 
       }
     } catch (err) {
       console.error("Login failed:", err);
-      alert("Invalid email or password. Please try again.");
-    //this is what shows up if the details dont match the backend of authorsied users
+      alert("Invalid email or password.");
+       //this is what shows up if the details dont match the backend of authorsied users
     }
   };
 
@@ -54,7 +52,7 @@ const Login = () => {
           <form onSubmit={handleLogin} style={formStyle}>
             <div style={inputGroup}>
               <label style={labelStyle}>Email Address</label>
-              {/* this is to enter the email */}
+               {/* this is to enter the email */}
               <input 
                 type="email" 
                 style={inputStyle} 
@@ -63,7 +61,6 @@ const Login = () => {
               />
             </div>
             {/* to enter the password */}
-
             <div style={inputGroup}>
               <label style={labelStyle}>Password</label>
               <input 
@@ -74,11 +71,9 @@ const Login = () => {
               />
             </div>
 {/* to sign in */}
-            <button type="submit" style={buttonStyle}>
-              SIGN IN
-            </button>
+            <button type="submit" style={buttonStyle}>SIGN IN</button>
           </form>
-{/* a regustration button to create a new account */}
+{/* a registration button to create a new account */}
           <p style={footerText}>
             Don't have an account? <Link to="/register" style={linkStyle}>Register here</Link>
           </p>
@@ -88,7 +83,6 @@ const Login = () => {
   );
 };
 
-// --- STYLES ---
 //styling with the consistent color scheme and visuals
 const pageStyle = { backgroundColor: '#062c1d', minHeight: '100vh', color: 'white', fontFamily: 'sans-serif' };
 const container = { display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '100px', paddingBottom: '50px' };
@@ -99,21 +93,7 @@ const formStyle = { display: 'flex', flexDirection: 'column', gap: '20px' };
 const inputGroup = { textAlign: 'left' };
 const labelStyle = { display: 'block', fontSize: '0.85rem', color: '#a7c957', marginBottom: '8px', fontWeight: '600' };
 const inputStyle = { width: '100%', padding: '14px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: 'white', outline: 'none', fontSize: '1rem', boxSizing: 'border-box' };
-
-const buttonStyle = {
-  width: '100%',
-  marginTop: '10px',
-  padding: '15px',
-  backgroundColor: '#e9edc9',
-  color: '#062c1d',
-  border: 'none',
-  borderRadius: '30px',
-  fontWeight: 'bold',
-  cursor: 'pointer',
-  fontSize: '1rem',
-  transition: '0.3s'
-};
-
+const buttonStyle = { width: '100%', marginTop: '10px', padding: '15px', backgroundColor: '#e9edc9', color: '#062c1d', border: 'none', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer' };
 const footerText = { marginTop: '25px', fontSize: '0.9rem', opacity: 0.8 };
 const linkStyle = { color: '#e9edc9', textDecoration: 'none', fontWeight: 'bold' };
 

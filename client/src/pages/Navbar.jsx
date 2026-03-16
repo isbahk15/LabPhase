@@ -70,6 +70,7 @@ const Navbar = () => {
 };
 
 // --- STYLES ---
+//this is for the consistent color scheme theme to make everything look tied together
 const navStyle = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px 5%', backgroundColor: '#062c1d', borderBottom: '1px solid rgba(233, 237, 201, 0.1)', position: 'sticky', top: 0, zIndex: 1000 };
 const logoSection = { display: 'flex', alignItems: 'center' };
 const logoText = { color: '#e9edc9', textDecoration: 'none', fontSize: '1.5rem', fontFamily: 'serif', fontWeight: 'bold' };

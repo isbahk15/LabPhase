@@ -6,30 +6,34 @@ import Navbar from "./Navbar";
 const Register = () => {
   // Added 'role' to state to capture user type
   const [formData, setFormData] = useState({
+    //uses a single state call like all my other forms to enusre efficiency
     username: "",
     email: "",
     password: "",
-    role: "client" // Default value
+    role: "client" // Default value if no role is selected
   });
   
   const navigate = useNavigate();
+  //sends the user to the backend to create  a new account handling the register button
 
   const handleRegister = async (e) => {
-    e.preventDefault();
+    e.preventDefault();//stops a reload
     try {
+      //the API call to send the entire form data object to our backend
       const response = await axios.post("http://localhost:5000/api/auth/register", formData);
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
         // Save the chosen role so the UI knows what to show
         localStorage.setItem("role", formData.role);
-        
+        //a success message to show an account was created
         alert("Account created successfully!");
         navigate("/marketplace");
         window.location.reload(); 
       }
     } catch (err) {
       console.error("Registration error:", err);
+      //alert the user because perhaps there alreday is a user with those credentials
       alert(err.response?.data?.msg || "Registration failed.");
     }
   };
@@ -44,6 +48,7 @@ const Register = () => {
 
           <form onSubmit={handleRegister} style={formStyle}>
             <div style={inputGroup}>
+              {/* this is where the user inputs their name */}
               <label style={labelStyle}>Full Name</label>
               <input 
                 type="text" 
@@ -53,7 +58,7 @@ const Register = () => {
                 required
               />
             </div>
-
+{/* email inputting */}
             <div style={inputGroup}>
               <label style={labelStyle}>Email Address</label>
               <input 
@@ -65,7 +70,8 @@ const Register = () => {
               />
             </div>
 
-            {/* --- NEW ROLE SELECTION --- */}
+            {/* --- NEW ROLE SELECTION
+            dropdown allows user to select the role they want --- */}
             <div style={inputGroup}>
               <label style={labelStyle}>I want to...</label>
               <select 
@@ -77,7 +83,7 @@ const Register = () => {
                 <option value="merchant" style={{color: 'black'}}>Sell Materials (Merchant)</option>
               </select>
             </div>
-
+{/* input password */}
             <div style={inputGroup}>
               <label style={labelStyle}>Password</label>
               <input 
@@ -93,7 +99,7 @@ const Register = () => {
               JOIN NOW
             </button>
           </form>
-
+          {/* if a  user already has an existing account, they are redirected to the login page */}
           <p style={footerText}>
             Already a member? <Link to="/login" style={linkStyle}>Sign In</Link>
           </p>
@@ -103,7 +109,7 @@ const Register = () => {
   );
 };
 
-// Styles kept consistent with your signature design
+// Styles kept consistent with signature design
 const pageStyle = { backgroundColor: '#062c1d', minHeight: '100vh', color: 'white', fontFamily: 'sans-serif' };
 const container = { display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '80px', paddingBottom: '40px' };
 const registerBox = { background: 'rgba(255, 255, 255, 0.03)', padding: '40px 50px', borderRadius: '24px 4px', border: '1px solid rgba(233, 237, 201, 0.1)', width: '100%', maxWidth: '450px', textAlign: 'center' };

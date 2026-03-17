@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap');
-
+/* this imports google fonts to use across the page */
 :root {
   --brand-green: #062c1d;
   --brand-cream: #e9edc9;
   --brand-sage: #a3b18a;
 }
+/* this is the color scheme for the entire website */
 
 body {
   margin: 0;
@@ -39,8 +40,8 @@ h1, h2, h3 {
   transform: translateY(-3px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
+/* this is the styling for my button */
 
-/* Matching inputs for your Login/Register pages */
 .auth-input {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(233, 237, 201, 0.3);
@@ -50,9 +51,9 @@ h1, h2, h3 {
   width: 100%;
   transition: all 0.3s ease;
 }
+/* this is to make my image on the landing page visible while still being able to see the text over the image clearly  */
 .hero-section {
   height: 80vh;
-  /* Note: Use plain CSS url() syntax, no backticks or ${} here */
   background-image: linear-gradient(rgba(6, 44, 29, 0.85), rgba(6, 44, 29, 0.95)), url('./assets/farmer.jpg');
   background-size: cover;
   background-position: center;
@@ -62,42 +63,40 @@ h1, h2, h3 {
   align-items: center;
   text-align: center;
 }
-/* Smoothly lift the buttons when hovered */
 .hero-primary-btn:hover, .hero-outline-btn:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   filter: brightness(1.1);
 }
 
-/* Make the primary button click feel real */
 .hero-primary-btn:active {
   transform: translateY(-1px);
 }
 
-/* Optional: Add a subtle glow to your highlight text */
 .sustainable-highlight {
   text-shadow: 0 0 15px rgba(167, 201, 87, 0.3);
+
+  /* these are to make the page more intriguing and interactive by adding fun features to the buttons */
 }
-/* Add this to your index.css */
 .stat-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   border-color: rgba(167, 201, 87, 0.4); /* Glow your accent green */
 }
-/* Mobile Styles */
+/* Mobile Styles to align with different sizes of screens so that one is able to view the whole webiste no matter the device */
 @media (max-width: 600px) {
   .hero-btn-group {
-    flex-direction: column; /* Stack buttons vertically */
-    gap: 15px;
+    flex-direction: column; 
     width: 100%;
     align-items: center;
   }
 
   .hero-primary-btn {
-    width: 90%; /* Make buttons fill the screen width */
+    width: 90%; 
     padding: 15px;
   }
   html {
   scroll-behavior: smooth !important;
 }
+/* this enable the scrolling on the pages to be smooth rather than "laging" */
 }

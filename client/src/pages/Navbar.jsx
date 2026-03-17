@@ -37,6 +37,7 @@ const Navbar = () => {
       </div>
       
       <div style={navLinks}>
+        {/* Anchor tags for smooth scrolling within the Landing page */}
         <a href="/#about-section" 
            style={getStyle('about')} 
            onMouseEnter={() => setHovered('about')} 
@@ -57,6 +58,7 @@ const Navbar = () => {
             <Link to="/marketplace" style={getStyle('market')} onMouseEnter={() => setHovered('market')} onMouseLeave={() => setHovered(null)}>Marketplace</Link>
             
             {/* STRICT CHECK: Only show if role is NOT 'client' */}
+            {/* This ensures only Merchants can access the Dashboard to manage listings */}
             {userRole !== 'client' && (
               <Link to="/dashboard" style={getStyle('dash')} onMouseEnter={() => setHovered('dash')} onMouseLeave={() => setHovered(null)}>Dashboard</Link>
             )}
@@ -77,6 +79,6 @@ const logoText = { color: '#e9edc9', textDecoration: 'none', fontSize: '1.5rem',
 const navLinks = { display: 'flex', gap: '20px', alignItems: 'center' };
 const linkStyle = { textDecoration: 'none', fontSize: '0.9rem', whiteSpace: 'nowrap', display: 'inline-block' };
 const registerBtn = { ...linkStyle, backgroundColor: '#e9edc9', color: '#062c1d', padding: '8px 20px', borderRadius: '20px', fontWeight: 'bold' };
-const logoutBtn = { backgroundColor: 'transparent', border: '1px solid #bc4749', color: '#bc4749', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' };
+const logoutBtn = { backgroundColor: 'transparent', border: '1px solid #bc4749', color: '#bc4749', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', transition: '0.2s' };
 
 export default Navbar;

@@ -12,7 +12,10 @@ const Marketplace = () => {
     const fetchListings = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('https://labphase-3.onrender.com', {
+        /** * Updated to production URL with /api/listings path.
+         * This matches your backend structure for fetching items.
+         **/
+        const res = await axios.get('https://labphase-3.onrender.com/api/listings', {
           headers: { Authorization: `Bearer ${token}` } // Protected route requires JWT
         });
         // Validation: Ensure the response is an array before setting state

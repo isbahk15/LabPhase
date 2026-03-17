@@ -21,8 +21,10 @@ const Contacts = () => {
     setLoading(true);
 
     try {
-      // Sending the data to Node.js backend
-      await axios.post("https://labphase-3.onrender.com", formData);
+      // Sending the data to Node.js backend 
+      // Updated to use the live production URL to avoid ERR_CONNECTION_REFUSED
+      await axios.post("https://labphase-3.onrender.com/api/contacts", formData);
+      
       // singals a sucessful request submission
       toast.success("Inquiry sent! Our team will email you shortly.");
       
@@ -128,5 +130,6 @@ const formStyle = { display: 'flex', flexDirection: 'column', gap: '15px' };
 const submitBtn = { padding: '15px', backgroundColor: '#e9edc9', color: '#062c1d', border: 'none', borderRadius: '30px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1rem' };
 const contactDetails = { display: 'flex', flexDirection: 'column', gap: '15px' };
 const label = { color: '#a7c957', marginRight: '10px' };
+const detailItem = { fontSize: '1rem' }; // Added missing style for consistency
 
 export default Contacts;

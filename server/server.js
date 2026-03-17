@@ -18,18 +18,26 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true })); 
 
 // 3. Routes
+// Updated to match the frontend axios calls for /api/auth/login and /api/auth/register
 app.use('/api/auth', require('./routes/auth'));
+
+// Handles merchant-specific actions like fetching their own items
 app.use('/api/merchant', require('./routes/merchant'));
+
+// Handles global marketplace listings (fetching all and fetching by ID)
 app.use('/api/listings', require('./routes/listings')); 
-// New Route: Handles contact form submissions
+
+// New Route: Handles contact form submissions from the Landing page
 app.use('/api/contacts', require('./routes/contacts')); 
+
 // A simple endpoint to verify the server is online and reachable
 app.get('/', (req, res) => {
     res.send('AgroLoop API is running...');
 });
 
 // 5. Start Server to define the network port and starts listening for incoming requests.
-const PORT = 5000;
+// Note: When deploying to Render, use process.env.PORT to allow the platform to assign a port
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 AgroLoop Server running on port ${PORT}`);
 });

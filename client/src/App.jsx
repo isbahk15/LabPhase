@@ -1,25 +1,30 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Landing from './pages/Landing';
-import Login from './pages/Login';
+import Login from './pages/login';
 import Register from './pages/Register';
 import Marketplace from './pages/Marketplace';
 import Dashboard from './pages/Dashboard';
 import ProductDetail from './pages/ProductDetail';
 import AddListing from './pages/AddListing'; 
+
 // It evaluates auth status and role permissions before allowing navigation.
 const ProtectedRoute = ({ children, allowClient = true }) => {
   const isAuthenticated = localStorage.getItem('token'); 
   const userRole = localStorage.getItem('role'); 
-// Security Check 1: Redirect to Login if no token exists
+
+  // Security Check 1: Redirect to Login if no token exists
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-// If a route is merchant-only (allowClient=false) but the user is a client, redirect them.
+
+  // If a route is merchant-only (allowClient=false) but the user is a client, redirect them.
+  // This prevents buyers from accessing the listing forms or merchant dashboard.
   if (userRole === 'client' && !allowClient) {
     return <Navigate to="/marketplace" replace />;
   }
-// All checks passed; render the component
+
+  // All checks passed; render the component
   return children;
 };
 
@@ -79,6 +84,7 @@ function App() {
           } 
         />
 
+        {/* Fallback: If route doesn't exist, go home */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>

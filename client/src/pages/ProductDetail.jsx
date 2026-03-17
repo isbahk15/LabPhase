@@ -12,7 +12,8 @@ const ProductDetail = () => {
     const fetchProduct = async () => {
       try {
         // GET request to a parameterized API route
-        const res = await axios.get(`https://labphase-3.onrender.com`);
+        // Updated to use the correct /api/listings/:id endpoint
+        const res = await axios.get(`https://labphase-3.onrender.com/api/listings/${id}`);
         setProduct(res.data);
       } catch (err) {
         console.error("Error fetching product", err);
@@ -59,6 +60,7 @@ const ProductDetail = () => {
           <p style={detailItem}>
             <strong style={detailLabel}>Posted By:</strong>
             {/* Check if user exists first to prevent crashes */}
+            {/* Note: Ensure backend uses 'populate' to send the user object */}
             {product.user ? product.user.name : "Anonymous Merchant"}
           </p>
           {/* Numerical data display */}

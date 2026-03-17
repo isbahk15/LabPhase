@@ -20,6 +20,7 @@ const Register = () => {
     e.preventDefault();//stops a reload
     try {
       //the API call to send the entire form data object to our backend
+      // Updated to correct production auth endpoint
       const response = await axios.post("https://labphase-3.onrender.com/api/auth/register", formData);
 
       if (response.data.token) {
@@ -71,7 +72,7 @@ const Register = () => {
             </div>
 
             {/* --- NEW ROLE SELECTION
-            dropdown allows user to select the role they want --- */}
+             dropdown allows user to select the role they want --- */}
             <div style={inputGroup}>
               <label style={labelStyle}>I want to...</label>
               <select 

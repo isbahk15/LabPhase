@@ -8,8 +8,8 @@ import farmerImg from '../assets/farmer.jpg';
 
 const Landing = () => {
   const navigate = useNavigate();
-//this is for good UI
-// the shopbtn allows the user to see the "back to the top" arrow
+  //this is for good UI
+  // the shopbtn allows the user to see the "back to the top" arrow
 
   const [showTopBtn, setShowTopBtn] = useState(false);
   
@@ -47,7 +47,8 @@ const Landing = () => {
 
     try {
       // Hits your backend route directly from the home page
-      await axios.post("https://labphase-3.onrender.com", formData);
+      // Updated to production URL with /api/contacts path
+      await axios.post("https://labphase-3.onrender.com/api/contacts", formData);
       toast.success("Message sent! We'll get back to you via email.");
       //this notfifies a user their request was a success
       setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });
@@ -74,7 +75,14 @@ const Landing = () => {
           <p style={heroSub}>
             Closing the loop between surplus materials and the farmers who need them most.
           </p>
-          
+          <div style={btnGroup}>
+             <button 
+                style={unifiedBtnStyle} 
+                onClick={() => navigate('/marketplace')}
+             >
+                Explore Marketplace
+             </button>
+          </div>
         </div>
       </header>
 
@@ -140,7 +148,8 @@ const Landing = () => {
           </div>
         </div>
       </section>
-{/* this is the smooth back to the top button */}
+      
+      {/* this is the smooth back to the top button */}
       {showTopBtn && (
         <button onClick={scrollToTop} style={backToTopStyle}>↑</button>
       )}

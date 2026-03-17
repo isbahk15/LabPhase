@@ -10,7 +10,8 @@ const jwt = require('jsonwebtoken');
  */
 router.post('/register', async (req, res) => {
     try {
-        const { username, email, password } = req.body; 
+        // Updated to include 'role' from the request body
+        const { username, email, password, role } = req.body; 
         
         // 1. Check if the user already exists
         let user = await User.findOne({ email });
@@ -18,8 +19,8 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ msg: 'User already exists' });
         }
 
-        // 2. Create new user instance
-        user = new User({ username, email, password });
+        // 2. Create new user instance (now including role)
+        user = new User({ username, email, password, role: role || 'client' });
 
         // 3. Hash the password
         const salt = await bcrypt.genSalt(10);
@@ -29,14 +30,16 @@ router.post('/register', async (req, res) => {
         await user.save();
 
         // 5. Generate and return JWT
+        // Included 'role' in the payload for easier frontend access
         const token = jwt.sign(
-            { id: user._id }, 
+            { id: user._id, role: user.role }, 
             process.env.JWT_SECRET, 
             { expiresIn: '1h' }
         );
 
         res.status(201).json({ 
             token, 
+            role: user.role, // Explicitly sending role for localStorage
             msg: 'User registered successfully' 
         });
 
@@ -68,12 +71,13 @@ router.post('/login', async (req, res) => {
 
         // 3. Generate and return JWT
         const token = jwt.sign(
-            { id: user._id }, 
+            { id: user._id, role: user.role }, 
             process.env.JWT_SECRET, 
             { expiresIn: '1h' }
         );
 
-        res.json({ token });
+        // Returning both token and role to satisfy Frontend storage needs
+        res.json({ token, role: user.role });
 
     } catch (err) {
         console.error("Login Error:", err.message);

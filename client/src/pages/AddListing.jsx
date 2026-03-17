@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
+
 // A protected form that allows merchants to  post new materials to the marketplace
 const AddListing = () => {
   const navigate = useNavigate();  
   // Hook for programmatic redirection
+
   // Initialize state for the form fields
   const [formData, setFormData] = useState({
     name: '',
@@ -14,15 +16,19 @@ const AddListing = () => {
     category: 'Organic Waste', // Default value
     description: ''
   });
+
 // handleSubmit: Sends the form data to the backend.
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
+      
     //   Post request to the listings endpoint
-      await axios.post('https://labphase-3.onrender.com', formData, {
+    // Updated to use the live Render URL and the specific /api/listings path
+      await axios.post('https://labphase-3.onrender.com/api/listings', formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
+
       alert("Listing posted successfully!");
       navigate('/marketplace'); 
     } catch (err) {
@@ -30,6 +36,7 @@ const AddListing = () => {
       alert("Failed to post. Check your connection.");
     }
   };
+
 // Array used to map through and generate radio button options
   const categories = ["Organic Waste", "Seed", "Tool", "Plastic"];
 

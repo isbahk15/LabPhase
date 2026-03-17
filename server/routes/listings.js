@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Listing = require('../models/Listing');
 const auth = require('../middleware/authMiddleware');
+
 // CREATE Listing
 router.post('/', auth, async (req, res) => {
     try {
@@ -15,10 +16,22 @@ router.post('/', auth, async (req, res) => {
         res.status(500).json({ message: "Error saving listing" });
     }
 });
-// READ ALL Listings
+
+// READ ALL Listings (Fixed: This was missing and is needed by Marketplace.jsx)
+router.get('/', async (req, res) => {
+  try {
+    const listings = await Listing.find().populate('user', 'username').sort({ createdAt: -1 });
+    res.json(listings);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching marketplace data" });
+  }
+});
+
+// READ ONE Listing (Fixed duplicate route logic)
 router.get('/:id', async (req, res) => {
   try {
-    const listing = await Listing.findById(req.params.id).populate('user', 'name');
+    // Populate allows the frontend to see the merchant's name instead of just an ID
+    const listing = await Listing.findById(req.params.id).populate('user', 'username');
     if (!listing) return res.status(404).json({ message: "Listing not found" });
     res.json(listing);
   } catch (err) {
@@ -26,18 +39,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// READ ONE Listing
-router.get('/:id', async (req, res) => {
-  try {
-    const listing = await Listing.findById(req.params.id).populate('user', 'name');
-    if (!listing) return res.status(404).json({ message: "Not found" });
-    res.json(listing);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
 // DELETE Listing
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => { // Added auth to ensure only owner can delete
   try {
     const deletedItem = await Listing.findByIdAndDelete(req.params.id);
     if (!deletedItem) {

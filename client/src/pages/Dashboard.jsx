@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 import toast, { Toaster } from 'react-hot-toast';
@@ -15,23 +15,24 @@ const Dashboard = () => {
     category: "Fertilizer", 
     status: "Active"
   });
-  
-  // Use the live Render URL
-  const fetchListings = async () => {
+
+  // --- FUNCTIONS DECLARED BEFORE USEEFFECT TO FIX HOISTING ---
+
+  // Wrapped in useCallback to prevent cascading render warnings
+  const fetchListings = useCallback(async () => {
     try {
+      // Using live Render URL
       const res = await axios.get("https://labphase-3.onrender.com/api/listings");
       setMyItems(res.data);
     } catch (err) {
-      console.error(err);
       toast.error("Could not load listings.");
     }
-  };
+  }, []);
 
   // Fetch data on loadz
   useEffect(() => {
-    fetchListings();
-  }, []);
-
+    fetchListings(); 
+  }, [fetchListings]);
 
   // Submit with Auth Token to fix "Anonymous Merchant"
   const handleSubmit = async (e) => {
@@ -69,6 +70,8 @@ const Dashboard = () => {
       }
     }
   };
+
+  // --- RENDER LOGIC ---
 
   const filteredItems = myItems.filter(item => 
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

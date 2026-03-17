@@ -1,25 +1,20 @@
 const jwt = require('jsonwebtoken');
-// verifies the JWT token so that unauthorised users are prevented acccess
 
-module.exports = function(req, res, next) {
-    // extracts token from header
-    const authHeader = req.header('Authorization');
-    
-    // Check if no token, then returns a 401 status code
-    if (!authHeader) {
-        return res.status(401).json({ message: 'No token, authorization denied' });
+module.exports = function (req, res, next) {
+    // 1. Get token from header
+    const token = req.header('Authorization')?.split(' ')[1] || req.header('x-auth-token');
+
+    // 2. Check if no token
+    if (!token) {
+        return res.status(401).json({ msg: 'No token, authorization denied' });
     }
 
+    // 3. Verify token
     try {
-        // this logic splits the string to retrieve only the needed token string
-        const token = authHeader.split(' ')[1] || authHeader;
-        // if the token has been altered it shows an error
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        req.user = decoded;
+        req.user = decoded; // This adds the user ID (decoded.id) to the request object
         next();
     } catch (err) {
-        // if the verification fails, a 401 status code is displayed
-        res.status(401).json({ message: 'Token is not valid' });
+        res.status(401).json({ msg: 'Token is not valid' });
     }
 };

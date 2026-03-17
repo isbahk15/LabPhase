@@ -4,11 +4,10 @@ import Navbar from "./Navbar";
 import toast, { Toaster } from 'react-hot-toast';
 
 const Dashboard = () => {
-  const [showForm, setShowForm] = useState(false);// controls my new listing feature
-  const [myItems, setMyItems] = useState([]); // this stores the array of the newly listed materials
-  const [searchTerm, setSearchTerm] = useState(""); //this tracks what a user types in the search bar
+  const [showForm, setShowForm] = useState(false);
+  const [myItems, setMyItems] = useState([]); 
+  const [searchTerm, setSearchTerm] = useState(""); 
   const [formData, setFormData] = useState({
-    // this is for the listing form when posting it to the marketplace
     name: "", 
     weight: "", 
     price: "", 
@@ -16,40 +15,52 @@ const Dashboard = () => {
     category: "Fertilizer", 
     status: "Active"
   });
-//this fetches data when a component is posted
+
+  // Fetch data on load
   useEffect(() => {
     fetchListings();
   }, []);
-//this fetches all the listings belonging to a particular merchant 
+
+  // Use the live Render URL
   const fetchListings = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/listings");
+      const res = await axios.get("https://labphase-3.onrender.com/api/listings");
       setMyItems(res.data);
     } catch (err) {
+      console.error(err);
       toast.error("Could not load listings.");
     }
   };
-// this is used to send data to the server to make it available to the customers
+
+  // Submit with Auth Token to fix "Anonymous Merchant"
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Image is removed from payload since we are skipping it
-      await axios.post("http://localhost:5000/api/listings", formData);
-      setShowForm(false); //this closes the modal
-      fetchListings(); // refreshes the marketplace page with all the new data
+      const token = localStorage.getItem('token'); 
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
+
+      await axios.post("https://labphase-3.onrender.com/api/listings", formData, config);
+      
+      setShowForm(false);
+      fetchListings(); 
       setFormData({ name: "", weight: "", price: "", description: "", category: "Fertilizer", status: "Active" });
       toast.success("New material listed successfully!");
-      //success notification to show everything works
     } catch (err) {
-      toast.error("Error saving listing.");
-      //error has been found signalling unsuccess
+      toast.error("Error saving listing. Please ensure you are logged in.");
     }
   };
-//this removes a listing from the page
+
   const deleteListing = async (id) => {
     if (window.confirm("Remove this material?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/listings/${id}`);
+        const token = localStorage.getItem('token');
+        await axios.delete(`https://labphase-3.onrender.com/api/listings/${id}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
         fetchListings();
         toast.success("Material removed.");
       } catch (err) {
@@ -58,21 +69,17 @@ const Dashboard = () => {
     }
   };
 
-//this is my UI logic to make it easy to navigate through the webite
-//this filters the lost based on the criteria the user is looking for 
-
-
   const filteredItems = myItems.filter(item => 
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-// this helps to return emojis that are matched to the criteria requested
+
   const getCategoryIcon = (cat) => {
     if (cat === 'Seed') return '🌾';
     if (cat === 'Tool') return '🚜';
-    return '🌱'; // Default for Fertilizer
+    return '🌱'; 
   };
-//this is the color scheme
+
   const getCategoryStyle = (cat) => {
     const styles = {
       Fertilizer: { bg: 'rgba(167, 201, 87, 0.2)', color: '#a7c957' },
@@ -86,7 +93,6 @@ const Dashboard = () => {
     <div style={dashPage}>
       <Toaster position="top-center" />
       <Navbar />
-      {/* this is my header section of this page */}
       <div style={container}>
         <div style={headerSection}>
           <h2 style={title}>Merchant Account</h2>
@@ -94,7 +100,7 @@ const Dashboard = () => {
             + List New Material
           </button>
         </div>
-{/* this is my search bar */}
+
         <div style={searchContainer}>
           <input 
             type="text" 
@@ -103,7 +109,7 @@ const Dashboard = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-{/* this is my listings table*/}
+
         <div style={tableWrapper}>
           <table style={table}>
             <thead>
@@ -148,7 +154,7 @@ const Dashboard = () => {
           </table>
         </div>
       </div>
-{/* this is my modal form */}
+
       {showForm && (
         <div style={modalOverlay} onClick={() => setShowForm(false)}>
           <div style={modalContent} onClick={(e) => e.stopPropagation()}>
@@ -199,7 +205,6 @@ const Dashboard = () => {
 };
 
 // --- STYLES ---
-//these ae colors to match the agroloop aesthetic
 const dashPage = { backgroundColor: '#062c1d', minHeight: '100vh', color: 'white', fontFamily: 'sans-serif' };
 const container = { padding: '40px 8%', maxWidth: '1400px', margin: '0 auto' };
 const headerSection = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' };

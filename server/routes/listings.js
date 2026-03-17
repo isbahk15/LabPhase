@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Listing = require('../models/Listing');
-
-// 1. Create - Now with a fallback for the image field
-// backend/routes/listings.js
+const auth = require('../middleware/auth');
+// CREATE Listing
 router.post('/', auth, async (req, res) => {
     try {
         const newListing = new Listing({
             ...req.body,
-            // req.user.id comes from your auth middleware
             user: req.user.id 
         });
         await newListing.save();
@@ -17,9 +15,7 @@ router.post('/', auth, async (req, res) => {
         res.status(500).json({ message: "Error saving listing" });
     }
 });
-
-// 2. Read All - Sorted by newest first
-// backend/routes/listings.js
+// READ ALL Listings
 router.get('/:id', async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id).populate('user', 'name');
@@ -30,11 +26,9 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// 3. Read ONE - Crucial for your ProductDetail page
-// Change your Get One route to this:
+// READ ONE Listing
 router.get('/:id', async (req, res) => {
   try {
-    // .populate('user', 'name') swaps the ID for the actual name
     const listing = await Listing.findById(req.params.id).populate('user', 'name');
     if (!listing) return res.status(404).json({ message: "Not found" });
     res.json(listing);
@@ -42,8 +36,7 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
-// 4. Delete - Clean removal
+// DELETE Listing
 router.delete('/:id', async (req, res) => {
   try {
     const deletedItem = await Listing.findByIdAndDelete(req.params.id);

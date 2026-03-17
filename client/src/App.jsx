@@ -6,12 +6,11 @@ import Register from './pages/Register';
 import Marketplace from './pages/Marketplace';
 import Dashboard from './pages/Dashboard';
 import ProductDetail from './pages/ProductDetail';
-
-// --- Security Guard with Role-Based Access ---
+// this checks for user authentication before it allows access to a certain page which is the dashboard
 const ProtectedRoute = ({ children, allowClient = true }) => {
   const isAuthenticated = localStorage.getItem('token'); 
   const userRole = localStorage.getItem('role'); // Roles: 'merchant' or 'client'
-
+// is the user is not authenticated, they are redirected to the log in page
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -28,6 +27,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
+        {/* these are for the paths accessible to anyone regardless of your role */}
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -51,7 +51,7 @@ function App() {
           } 
         />
 
-        {/* Dashboard: Restricted - allowClient is FALSE */}
+        {/* Dashboard: Restricted - clients are not allowed access */}
         <Route 
           path="/dashboard" 
           element={
@@ -60,7 +60,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
-
+{/* any URLS that are unknown will lead back to the main page to avoid an error showing up */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>

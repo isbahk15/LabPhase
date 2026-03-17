@@ -6,16 +6,16 @@ import Register from './pages/Register';
 import Marketplace from './pages/Marketplace';
 import Dashboard from './pages/Dashboard';
 import ProductDetail from './pages/ProductDetail';
-// this checks for user authentication before it allows access to a certain page which is the dashboard
+import AddListing from './pages/AddListing'; // 1. IMPORT YOUR NEW FILE
+
 const ProtectedRoute = ({ children, allowClient = true }) => {
   const isAuthenticated = localStorage.getItem('token'); 
-  const userRole = localStorage.getItem('role'); // Roles: 'merchant' or 'client'
-// is the user is not authenticated, they are redirected to the log in page
+  const userRole = localStorage.getItem('role'); 
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  // Block Clients from accessing Merchant-only areas (Dashboard)
   if (userRole === 'client' && !allowClient) {
     return <Navigate to="/marketplace" replace />;
   }
@@ -27,12 +27,11 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        {/* these are for the paths accessible to anyone regardless of your role */}
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Marketplace: Accessible by everyone logged in */}
+        {/* Marketplace & Details */}
         <Route 
           path="/marketplace" 
           element={
@@ -51,7 +50,17 @@ function App() {
           } 
         />
 
-        {/* Dashboard: Restricted - clients are not allowed access */}
+        {/* 2. ADD THIS ROUTE: Only Merchants can add listings */}
+        <Route 
+          path="/add-listing" 
+          element={
+            <ProtectedRoute allowClient={false}>
+              <AddListing />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Dashboard: Merchant only */}
         <Route 
           path="/dashboard" 
           element={
@@ -60,7 +69,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
-{/* any URLS that are unknown will lead back to the main page to avoid an error showing up */}
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>

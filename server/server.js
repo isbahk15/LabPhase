@@ -1,3 +1,4 @@
+// DNS Configuration: for my device becaouse it was preventing a connection
 const dns = require('node:dns/promises');
 dns.setServers(['1.1.1.1', '1.0.0.1', '8.8.8.8']);
 
@@ -20,16 +21,14 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/merchant', require('./routes/merchant'));
 app.use('/api/listings', require('./routes/listings')); 
-
-// --- NEW ROUTE ADDED HERE ---
+// New Route: Handles contact form submissions
 app.use('/api/contacts', require('./routes/contacts')); 
-
-// 4. Basic Health Check (Optional but helpful)
+// A simple endpoint to verify the server is online and reachable
 app.get('/', (req, res) => {
     res.send('AgroLoop API is running...');
 });
 
-// 5. Start Server
+// 5. Start Server to define the network port and starts listening for incoming requests.
 const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`🚀 AgroLoop Server running on port ${PORT}`);

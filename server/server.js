@@ -13,7 +13,18 @@ const app = express();
 connectDB(); 
 
 // 2. Middleware
-app.use(cors()); 
+// Updated CORS to allow your specific Vercel domains and local development
+app.use(cors({
+    origin: [
+        'https://lab-phase-whgr.vercel.app', 
+        'https://lab-phase-whgr-hc89q9c2s-isbahs-projects-59c0c0f4.vercel.app',
+        'http://localhost:5173'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+})); 
+
 app.use(express.json({ limit: '10mb' })); 
 app.use(express.urlencoded({ limit: '10mb', extended: true })); 
 

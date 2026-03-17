@@ -6,20 +6,20 @@ import Register from './pages/Register';
 import Marketplace from './pages/Marketplace';
 import Dashboard from './pages/Dashboard';
 import ProductDetail from './pages/ProductDetail';
-import AddListing from './pages/AddListing'; // 1. IMPORT YOUR NEW FILE
-
+import AddListing from './pages/AddListing'; 
+// It evaluates auth status and role permissions before allowing navigation.
 const ProtectedRoute = ({ children, allowClient = true }) => {
   const isAuthenticated = localStorage.getItem('token'); 
   const userRole = localStorage.getItem('role'); 
-
+// Security Check 1: Redirect to Login if no token exists
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-
+// If a route is merchant-only (allowClient=false) but the user is a client, redirect them.
   if (userRole === 'client' && !allowClient) {
     return <Navigate to="/marketplace" replace />;
   }
-
+// All checks passed; render the component
   return children;
 };
 
@@ -32,6 +32,9 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         {/* Marketplace & Details */}
+        {/* --- GENERAL PROTECTED ROUTES --- 
+            Accessible by both Merchants and Clients (allowClient={true})
+        */}
         <Route 
           path="/marketplace" 
           element={
@@ -50,7 +53,12 @@ function App() {
           } 
         />
 
-        {/* 2. ADD THIS ROUTE: Only Merchants can add listings */}
+        {/* Only Merchants can add listings */}
+        {/* --- MERCHANT-ONLY PROTECTED ROUTES --- 
+            Restricted via allowClient={false} 
+        */}
+        
+        {/* Route for the "Post Item" form */}
         <Route 
           path="/add-listing" 
           element={
@@ -61,6 +69,7 @@ function App() {
         />
 
         {/* Dashboard: Merchant only */}
+        {/* Main Merchant analytics/management dashboard */}
         <Route 
           path="/dashboard" 
           element={

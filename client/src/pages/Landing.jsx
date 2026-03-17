@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Added for the form submission
 import toast, { Toaster } from 'react-hot-toast'; // Added for feedback
 import Navbar from './Navbar';
-import aboutImg from '../assets/about.jpg';
+import aboutImg from '../assets/About.jpg';
 import farmerImg from '../assets/farmer.jpg';
 
 const Landing = () => {

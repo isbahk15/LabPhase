@@ -22,7 +22,7 @@ const Contacts = () => {
 
     try {
       // Sending the data to Node.js backend
-      await axios.post("http://localhost:5000/api/contacts", formData);
+      await axios.post("https://labphase-3.onrender.com", formData);
       // singals a sucessful request submission
       toast.success("Inquiry sent! Our team will email you shortly.");
       

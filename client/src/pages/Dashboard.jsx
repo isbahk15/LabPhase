@@ -15,12 +15,7 @@ const Dashboard = () => {
     category: "Fertilizer", 
     status: "Active"
   });
-
-  // Fetch data on loadz
-  useEffect(() => {
-    fetchListings();
-  }, []);
-
+  
   // Use the live Render URL
   const fetchListings = async () => {
     try {
@@ -31,6 +26,12 @@ const Dashboard = () => {
       toast.error("Could not load listings.");
     }
   };
+
+  // Fetch data on loadz
+  useEffect(() => {
+    fetchListings();
+  }, []);
+
 
   // Submit with Auth Token to fix "Anonymous Merchant"
   const handleSubmit = async (e) => {

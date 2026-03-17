@@ -47,7 +47,7 @@ const Landing = () => {
 
     try {
       // Hits your backend route directly from the home page
-      await axios.post("http://localhost:5000/api/contacts", formData);
+      await axios.post("https://labphase-3.onrender.com", formData);
       toast.success("Message sent! We'll get back to you via email.");
       //this notfifies a user their request was a success
       setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });

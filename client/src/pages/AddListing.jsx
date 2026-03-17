@@ -20,7 +20,7 @@ const AddListing = () => {
     try {
       const token = localStorage.getItem('token');
     //   Post request to the listings endpoint
-      await axios.post('http://localhost:5000/api/listings', formData, {
+      await axios.post('https://labphase-3.onrender.com', formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("Listing posted successfully!");

@@ -20,7 +20,7 @@ const Register = () => {
     e.preventDefault();//stops a reload
     try {
       //the API call to send the entire form data object to our backend
-      const response = await axios.post("https://labphase-3.onrender.com/", formData);
+      const response = await axios.post("https://labphase-3.onrender.com/api/auth/register", formData);
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);

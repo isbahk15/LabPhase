@@ -12,7 +12,7 @@ const ProductDetail = () => {
     const fetchProduct = async () => {
       try {
         // GET request to a parameterized API route
-        const res = await axios.get(`http://localhost:5000/api/listings/${id}`);
+        const res = await axios.get(`https://labphase-3.onrender.com`);
         setProduct(res.data);
       } catch (err) {
         console.error("Error fetching product", err);

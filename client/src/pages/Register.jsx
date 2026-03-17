@@ -1,125 +1,89 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
 import axios from "axios";
-import Navbar from "./Navbar";
+import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext"; // Import your context
+import toast, { Toaster } from 'react-hot-toast';
 
 const Register = () => {
-  // Added 'role' to state to capture user type
-  const [formData, setFormData] = useState({
-    //uses a single state call like all my other forms to enusre efficiency
-    username: "",
-    email: "",
-    password: "",
-    role: "client" // Default value if no role is selected
-  });
-  
-  const navigate = useNavigate();
-  //sends the user to the backend to create  a new account handling the register button
+    const [formData, setFormData] = useState({ name: "", email: "", password: "", role: "Merchant" });
+    const { setToken } = useContext(AuthContext); // Use the setToken function from your context
+    const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();//stops a reload
-    try {
-      //the API call to send the entire form data object to our backend
-      const response = await axios.post("http://localhost:5000/api/auth/register", formData);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            // Updated to your live Render URL
+            const res = await axios.post("https://labphase-3.onrender.com/api/auth/register", formData);
+            
+            // Save the token to your context/localStorage
+            setToken(res.data.token);
+            
+            toast.success("Account created successfully!");
+            
+            // Redirect based on role
+            if (formData.role === "Merchant") {
+                navigate("/dashboard");
+            } else {
+                navigate("/marketplace");
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error(err.response?.data?.msg || "Registration failed. Check your connection.");
+        }
+    };
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        // Save the chosen role so the UI knows what to show
-        localStorage.setItem("role", formData.role);
-        //a success message to show an account was created
-        alert("Account created successfully!");
-        navigate("/marketplace");
-        window.location.reload(); 
-      }
-    } catch (err) {
-      console.error("Registration error:", err);
-      //alert the user because perhaps there alreday is a user with those credentials
-      alert(err.response?.data?.msg || "Registration failed.");
-    }
-  };
+    return (
+        <div style={pageStyle}>
+            <Toaster position="top-center" />
+            <div style={cardStyle}>
+                <h2 style={titleStyle}>Create Account</h2>
+                <p style={subTitleStyle}>Join the AgroLoop community.</p>
+                
+                <form onSubmit={handleSubmit} style={formStyle}>
+                    <input 
+                        type="text" placeholder="Full Name" required style={inputStyle}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                    />
+                    <input 
+                        type="email" placeholder="Email Address" required style={inputStyle}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
+                    />
+                    <input 
+                        type="password" placeholder="Password" required style={inputStyle}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })} 
+                    />
+                    
+                    <label style={labelStyle}>I want to...</label>
+                    <select 
+                        style={selectStyle}
+                        value={formData.role}
+                        onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                    >
+                        <option value="Merchant">Sell Surplus Materials</option>
+                        <option value="Customer">Buy Materials</option>
+                    </select>
 
-  return (
-    <div style={pageStyle}>
-      <Navbar />
-      <div style={container}>
-        <div style={registerBox}>
-          <h2 style={title}>Create Account</h2>
-          <p style={subtitle}>Join the AgroLoop community.</p>
-
-          <form onSubmit={handleRegister} style={formStyle}>
-            <div style={inputGroup}>
-              {/* this is where the user inputs their name */}
-              <label style={labelStyle}>Full Name</label>
-              <input 
-                type="text" 
-                placeholder="John Doe" 
-                style={inputStyle} 
-                onChange={(e) => setFormData({...formData, username: e.target.value})}
-                required
-              />
+                    <button type="submit" style={btnStyle}>Sign Up</button>
+                </form>
+                
+                <p style={footerText}>
+                    Already have an account? <Link to="/login" style={linkStyle}>Login here</Link>
+                </p>
             </div>
-{/* email inputting */}
-            <div style={inputGroup}>
-              <label style={labelStyle}>Email Address</label>
-              <input 
-                type="email" 
-                placeholder="agro@loop.com" 
-                style={inputStyle} 
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                required
-              />
-            </div>
-
-            {/* --- NEW ROLE SELECTION
-            dropdown allows user to select the role they want --- */}
-            <div style={inputGroup}>
-              <label style={labelStyle}>I want to...</label>
-              <select 
-                style={inputStyle}
-                value={formData.role}
-                onChange={(e) => setFormData({...formData, role: e.target.value})}
-              >
-                <option value="client" style={{color: 'black'}}>Buy Materials (Client)</option>
-                <option value="merchant" style={{color: 'black'}}>Sell Materials (Merchant)</option>
-              </select>
-            </div>
-{/* input password */}
-            <div style={inputGroup}>
-              <label style={labelStyle}>Password</label>
-              <input 
-                type="password" 
-                placeholder="••••••••" 
-                style={inputStyle} 
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
-                required
-              />
-            </div>
-
-            <button type="submit" style={buttonStyle}>
-              JOIN NOW
-            </button>
-          </form>
-          {/* if a  user already has an existing account, they are redirected to the login page */}
-          <p style={footerText}>
-            Already a member? <Link to="/login" style={linkStyle}>Sign In</Link>
-          </p>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
-// Styles kept consistent with signature design
-const pageStyle = { backgroundColor: '#062c1d', minHeight: '100vh', color: 'white', fontFamily: 'sans-serif' };
-const container = { display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '80px', paddingBottom: '40px' };
-const registerBox = { background: 'rgba(255, 255, 255, 0.03)', padding: '40px 50px', borderRadius: '24px 4px', border: '1px solid rgba(233, 237, 201, 0.1)', width: '100%', maxWidth: '450px', textAlign: 'center' };
-const title = { fontFamily: 'serif', fontSize: '2.5rem', color: '#e9edc9', marginBottom: '8px' };
-const subtitle = { fontSize: '0.85rem', opacity: 0.7, marginBottom: '25px' };
+// --- STYLES (Matching your AgroLoop aesthetic) ---
+const pageStyle = { backgroundColor: '#062c1d', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white', fontFamily: 'sans-serif' };
+const cardStyle = { background: 'rgba(255, 255, 255, 0.03)', padding: '40px 50px', borderRadius: '24px', border: '1px solid rgba(233, 237, 201, 0.1)', width: '100%', maxWidth: '450px', textAlign: 'center' };
+const titleStyle = { fontFamily: 'serif', fontSize: '2.5rem', color: '#e9edc9', marginBottom: '8px' };
+const subTitleStyle = { fontSize: '0.85rem', opacity: 0.7, marginBottom: '25px' };
 const formStyle = { display: 'flex', flexDirection: 'column', gap: '15px' };
-const inputGroup = { textAlign: 'left' };
-const labelStyle = { display: 'block', fontSize: '0.8rem', color: '#a7c957', marginBottom: '5px', fontWeight: '600' };
-const inputStyle = { width: '100%', padding: '12px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: 'white', boxSizing: 'border-box', outline: 'none' };
-const buttonStyle = { width: '100%', padding: '15px', marginTop: '10px', backgroundColor: '#e9edc9', color: '#062c1d', border: 'none', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer' };
+const inputStyle = { padding: '15px', borderRadius: '12px', border: '1px solid rgba(233, 237, 201, 0.2)', background: '#052317', color: 'white', outline: 'none' };
+const labelStyle = { textAlign: 'left', fontSize: '0.8rem', opacity: 0.6, marginBottom: '-10px', marginLeft: '5px' };
+const selectStyle = { padding: '15px', borderRadius: '12px', border: '1px solid rgba(233, 237, 201, 0.2)', background: '#052317', color: 'white', cursor: 'pointer' };
+const btnStyle = { padding: '15px', borderRadius: '12px', border: 'none', backgroundColor: '#e9edc9', color: '#062c1d', fontWeight: 'bold', fontSize: '1rem', cursor: 'pointer', marginTop: '10px' };
 const footerText = { marginTop: '20px', fontSize: '0.9rem', opacity: 0.8 };
 const linkStyle = { color: '#e9edc9', textDecoration: 'none', fontWeight: 'bold' };
 

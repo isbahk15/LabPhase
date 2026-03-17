@@ -16,7 +16,7 @@ const Dashboard = () => {
     status: "Active"
   });
 
-  // Fetch data on load
+  // Fetch data on loadz
   useEffect(() => {
     fetchListings();
   }, []);

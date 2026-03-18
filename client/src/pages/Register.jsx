@@ -21,7 +21,7 @@ const Register = () => {
     try {
       //the API call to send the entire form data object to our backend
       // Updated to correct production auth endpoint
-      const response = await axios.post("https://labphase-3.onrender.com/api/auth/register", formData);
+      const response = await axios.post("https://labphase-2.onrender.com/api/auth/register", formData);
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);

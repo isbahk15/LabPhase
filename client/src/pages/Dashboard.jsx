@@ -45,10 +45,10 @@ const Dashboard = () => {
       return;
     }
     const payload = {
-        materialType: formData.materialType,
-        materialName: formData.materialName.trim(),
+        type: formData.materialType,
+        name: formData.materialName.trim(),
         description: formData.description.trim(),
-        tons: parseFloat(formData.tons) || 0,
+        quantity: parseFloat(formData.tons) || 0,
         price: parseFloat(formData.price) || 0
     };
 

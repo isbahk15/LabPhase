@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Navbar from './Navbar';
-// Marketplace page: Fetches and displays all available listings.
+import Navbar from '../components/Navbar'; // Correct path to the new folder// Marketplace page: Fetches and displays all available listings.
 const Marketplace = () => {
   const [items, setItems] = useState([]);// Master list of items from DB
   const [loading, setLoading] = useState(true);// Loading state for UI feedback

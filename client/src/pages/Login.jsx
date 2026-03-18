@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios"; 
-import Navbar from "./Navbar";
-
+import Navbar from '../components/Navbar'; // Correct path to the new folder
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

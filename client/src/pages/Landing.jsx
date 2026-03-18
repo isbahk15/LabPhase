@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Added for the form submission
 import toast, { Toaster } from 'react-hot-toast'; // Added for feedback
-import Navbar from './Navbar';
-import aboutImg from '../assets/About.jpg';
+import Navbar from '../components/Navbar'; // Correct path to the new folderimport aboutImg from '../assets/About.jpg';
 import farmerImg from '../assets/farmer.jpg';
 
 const Landing = () => {

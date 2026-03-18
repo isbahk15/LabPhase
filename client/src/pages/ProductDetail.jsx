@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Navbar from "./Navbar";
-// ProductDetail Component: Displays the full information for a single marketplace item.
+import Navbar from '../components/Navbar'; // Correct path to the new folder// ProductDetail Component: Displays the full information for a single marketplace item.
 const ProductDetail = () => {
   const { id } = useParams();
   // State to hold the specific product object once fetched

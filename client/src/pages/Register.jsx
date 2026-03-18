@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import Navbar from "./Navbar";
+import Navbar from "../components/Navbar";
 
 const Register = () => {
   // Added 'role' to state to capture user type
@@ -10,18 +10,21 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
-    role: "client" // Default value if no role is selected
+    role: "client", // Default value if no role is selected
   });
-  
+
   const navigate = useNavigate();
   //sends the user to the backend to create  a new account handling the register button
 
   const handleRegister = async (e) => {
-    e.preventDefault();//stops a reload
+    e.preventDefault(); //stops a reload
     try {
       //the API call to send the entire form data object to our backend
       // Updated to correct production auth endpoint
-      const response = await axios.post("https://labphase-2.onrender.com/api/auth/register", formData);
+      const response = await axios.post(
+        "https://labphase-2.onrender.com/api/auth/register",
+        formData,
+      );
 
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
@@ -30,7 +33,7 @@ const Register = () => {
         //a success message to show an account was created
         alert("Account created successfully!");
         navigate("/marketplace");
-        window.location.reload(); 
+        window.location.reload();
       }
     } catch (err) {
       console.error("Registration error:", err);
@@ -51,22 +54,26 @@ const Register = () => {
             <div style={inputGroup}>
               {/* this is where the user inputs their name */}
               <label style={labelStyle}>Full Name</label>
-              <input 
-                type="text" 
-                placeholder="John Doe" 
-                style={inputStyle} 
-                onChange={(e) => setFormData({...formData, username: e.target.value})}
+              <input
+                type="text"
+                placeholder="John Doe"
+                style={inputStyle}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
                 required
               />
             </div>
-{/* email inputting */}
+            {/* email inputting */}
             <div style={inputGroup}>
               <label style={labelStyle}>Email Address</label>
-              <input 
-                type="email" 
-                placeholder="agro@loop.com" 
-                style={inputStyle} 
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+              <input
+                type="email"
+                placeholder="agro@loop.com"
+                style={inputStyle}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 required
               />
             </div>
@@ -75,23 +82,31 @@ const Register = () => {
              dropdown allows user to select the role they want --- */}
             <div style={inputGroup}>
               <label style={labelStyle}>I want to...</label>
-              <select 
+              <select
                 style={inputStyle}
                 value={formData.role}
-                onChange={(e) => setFormData({...formData, role: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, role: e.target.value })
+                }
               >
-                <option value="client" style={{color: 'black'}}>Buy Materials (Client)</option>
-                <option value="merchant" style={{color: 'black'}}>Sell Materials (Merchant)</option>
+                <option value="client" style={{ color: "black" }}>
+                  Buy Materials (Client)
+                </option>
+                <option value="merchant" style={{ color: "black" }}>
+                  Sell Materials (Merchant)
+                </option>
               </select>
             </div>
-{/* input password */}
+            {/* input password */}
             <div style={inputGroup}>
               <label style={labelStyle}>Password</label>
-              <input 
-                type="password" 
-                placeholder="••••••••" 
-                style={inputStyle} 
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+              <input
+                type="password"
+                placeholder="••••••••"
+                style={inputStyle}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
                 required
               />
             </div>
@@ -102,7 +117,10 @@ const Register = () => {
           </form>
           {/* if a  user already has an existing account, they are redirected to the login page */}
           <p style={footerText}>
-            Already a member? <Link to="/login" style={linkStyle}>Sign In</Link>
+            Already a member?{" "}
+            <Link to="/login" style={linkStyle}>
+              Sign In
+            </Link>
           </p>
         </div>
       </div>
@@ -111,17 +129,70 @@ const Register = () => {
 };
 
 // Styles kept consistent with signature design
-const pageStyle = { backgroundColor: '#062c1d', minHeight: '100vh', color: 'white', fontFamily: 'sans-serif' };
-const container = { display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '80px', paddingBottom: '40px' };
-const registerBox = { background: 'rgba(255, 255, 255, 0.03)', padding: '40px 50px', borderRadius: '24px 4px', border: '1px solid rgba(233, 237, 201, 0.1)', width: '100%', maxWidth: '450px', textAlign: 'center' };
-const title = { fontFamily: 'serif', fontSize: '2.5rem', color: '#e9edc9', marginBottom: '8px' };
-const subtitle = { fontSize: '0.85rem', opacity: 0.7, marginBottom: '25px' };
-const formStyle = { display: 'flex', flexDirection: 'column', gap: '15px' };
-const inputGroup = { textAlign: 'left' };
-const labelStyle = { display: 'block', fontSize: '0.8rem', color: '#a7c957', marginBottom: '5px', fontWeight: '600' };
-const inputStyle = { width: '100%', padding: '12px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: 'white', boxSizing: 'border-box', outline: 'none' };
-const buttonStyle = { width: '100%', padding: '15px', marginTop: '10px', backgroundColor: '#e9edc9', color: '#062c1d', border: 'none', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer' };
-const footerText = { marginTop: '20px', fontSize: '0.9rem', opacity: 0.8 };
-const linkStyle = { color: '#e9edc9', textDecoration: 'none', fontWeight: 'bold' };
+const pageStyle = {
+  backgroundColor: "#062c1d",
+  minHeight: "100vh",
+  color: "white",
+  fontFamily: "sans-serif",
+};
+const container = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  paddingTop: "80px",
+  paddingBottom: "40px",
+};
+const registerBox = {
+  background: "rgba(255, 255, 255, 0.03)",
+  padding: "40px 50px",
+  borderRadius: "24px 4px",
+  border: "1px solid rgba(233, 237, 201, 0.1)",
+  width: "100%",
+  maxWidth: "450px",
+  textAlign: "center",
+};
+const title = {
+  fontFamily: "serif",
+  fontSize: "2.5rem",
+  color: "#e9edc9",
+  marginBottom: "8px",
+};
+const subtitle = { fontSize: "0.85rem", opacity: 0.7, marginBottom: "25px" };
+const formStyle = { display: "flex", flexDirection: "column", gap: "15px" };
+const inputGroup = { textAlign: "left" };
+const labelStyle = {
+  display: "block",
+  fontSize: "0.8rem",
+  color: "#a7c957",
+  marginBottom: "5px",
+  fontWeight: "600",
+};
+const inputStyle = {
+  width: "100%",
+  padding: "12px",
+  background: "rgba(255, 255, 255, 0.05)",
+  border: "1px solid rgba(255, 255, 255, 0.1)",
+  borderRadius: "8px",
+  color: "white",
+  boxSizing: "border-box",
+  outline: "none",
+};
+const buttonStyle = {
+  width: "100%",
+  padding: "15px",
+  marginTop: "10px",
+  backgroundColor: "#e9edc9",
+  color: "#062c1d",
+  border: "none",
+  borderRadius: "30px",
+  fontWeight: "bold",
+  cursor: "pointer",
+};
+const footerText = { marginTop: "20px", fontSize: "0.9rem", opacity: 0.8 };
+const linkStyle = {
+  color: "#e9edc9",
+  textDecoration: "none",
+  fontWeight: "bold",
+};
 
 export default Register;

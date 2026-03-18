@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Navbar from "./Navbar";
-import toast, { Toaster } from 'react-hot-toast';
+import Navbar from '../components/Navbar'; // Correct path to the new folderimport toast, { Toaster } from 'react-hot-toast';
 
 const Contacts = () => {
   // i used one state call to handle all 4 criterias instead of creating 4 separate ones

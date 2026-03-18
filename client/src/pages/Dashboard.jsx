@@ -10,7 +10,7 @@ const Dashboard = () => {
     const fetchMyListings = async () => {
       try {
         // This automatically uses the token from your new API.js
-        const res = await API.get('/merchant/my-listings'); 
+        const res = await API.get('/merchant/listings'); 
         setListings(res.data);
       } catch (err) {
         console.error('Error fetching dashboard data:', err);

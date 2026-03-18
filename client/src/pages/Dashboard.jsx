@@ -6,11 +6,12 @@ const Dashboard = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Form state – now matches your Listing model exactly
   const [formData, setFormData] = useState({
     materialType: 'Fertilizer',
-    name: '',
+    materialName: '',     // was "name"
     description: '',
-    quantity: '',
+    tons: '',             // was "quantity"
     price: ''
   });
 
@@ -59,19 +60,17 @@ const Dashboard = () => {
       alert("✅ Listing created successfully!");
       setListings([response.data, ...listings]);
 
+      // Reset form
       setFormData({
         materialType: 'Fertilizer',
-        name: '',
+        materialName: '',
         description: '',
-        quantity: '',
+        tons: '',
         price: ''
       });
     } catch (error) {
       console.error('=== FULL CREATE ERROR ===', error.response || error);
-      
-      const msg = error.response?.data?.message || 
-                  error.message || 
-                  "Error saving listing. Please try again.";
+      const msg = error.response?.data?.message || error.message || "Error saving listing. Please try again.";
       alert(msg);
     }
   };
@@ -118,14 +117,14 @@ const Dashboard = () => {
               </select>
             </div>
 
-            <input type="text" name="name" placeholder="DAP" value={formData.name} onChange={handleInputChange}
+            <input type="text" name="materialName" placeholder="DAP" value={formData.materialName} onChange={handleInputChange}
               style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} required />
 
             <textarea name="description" placeholder="For mulching" value={formData.description} onChange={handleInputChange}
               style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none', minHeight: '80px' }} required />
 
             <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
-              <input type="number" name="quantity" placeholder="12" value={formData.quantity} onChange={handleInputChange}
+              <input type="number" name="tons" placeholder="12" value={formData.tons} onChange={handleInputChange}
                 style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} required />
               <input type="number" name="price" placeholder="1234" value={formData.price} onChange={handleInputChange}
                 style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} required />
@@ -148,7 +147,9 @@ const Dashboard = () => {
               backgroundColor: '#0f3d2a', padding: '15px', marginBottom: '10px', borderRadius: '8px',
               display: 'flex', justifyContent: 'space-between', alignItems: 'center'
             }}>
-              <span>{listing.name || listing.materialType} — {listing.quantity} × KES {listing.price}</span>
+              <span>
+                {listing.materialName} — {listing.tons} tons × KES {listing.price}
+              </span>
               <button onClick={() => deleteListing(listing._id)}
                 style={{ backgroundColor: '#c11212', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px' }}>
                 Delete

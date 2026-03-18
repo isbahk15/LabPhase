@@ -8,7 +8,7 @@ router.post('/', auth, async (req, res) => {
     try {
         const newListing = new Listing({
             ...req.body,
-            user: req.user.id
+            merchant: req.user.id          // ← Changed from user to merchant
         });
         await newListing.save();
         res.status(201).json(newListing);
@@ -22,7 +22,7 @@ router.post('/', auth, async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const listings = await Listing.find()
-      .populate('user', 'username')
+      .populate('merchant', 'username')   // ← Changed from user
       .sort({ createdAt: -1 });
     res.json(listings);
   } catch (err) {
@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
 // READ ONE Listing
 router.get('/:id', async (req, res) => {
   try {
-    const listing = await Listing.findById(req.params.id).populate('user', 'username');
+    const listing = await Listing.findById(req.params.id).populate('merchant', 'username');
     if (!listing) return res.status(404).json({ message: "Listing not found" });
     res.json(listing);
   } catch (err) {
@@ -48,7 +48,7 @@ router.put('/:id', auth, async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
     if (!listing) return res.status(404).json({ message: "Listing not found" });
-    if (listing.user.toString() !== req.user.id) {
+    if (listing.merchant.toString() !== req.user.id) {   // ← Changed to merchant
       return res.status(403).json({ message: "Unauthorized" });
     }
 
@@ -56,7 +56,7 @@ router.put('/:id', auth, async (req, res) => {
       req.params.id,
       { ...req.body },
       { new: true, runValidators: true }
-    ).populate('user', 'username');
+    ).populate('merchant', 'username');
 
     res.json(updated);
   } catch (err) {
@@ -70,7 +70,7 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
     if (!listing) return res.status(404).json({ message: "Listing not found" });
-    if (listing.user.toString() !== req.user.id) {
+    if (listing.merchant.toString() !== req.user.id) {   // ← Changed to merchant
       return res.status(403).json({ message: "Unauthorized" });
     }
 

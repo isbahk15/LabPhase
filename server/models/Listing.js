@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const listingSchema = new mongoose.Schema({
-    materialType: {
+    type: {
         type: String,
         required: true
     },
-    materialName: {
+    name: {
         type: String,
         required: true
     },
@@ -13,7 +13,7 @@ const listingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    tons: {
+    quantity: {
         type: Number,
         required: true
     },

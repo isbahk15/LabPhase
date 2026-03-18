@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
+import Navbar from '../pages/Navbar';
 
 const Dashboard = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Form state – now matches your Listing model exactly
+  // Form state – EXACTLY matches your Listing model fields
   const [formData, setFormData] = useState({
     materialType: 'Fertilizer',
-    materialName: '',     // was "name"
+    materialName: '',
     description: '',
-    tons: '',             // was "quantity"
+    tons: '',
     price: ''
   });
 
@@ -45,6 +45,9 @@ const Dashboard = () => {
       return;
     }
 
+    // Debug: see exactly what is being sent
+    console.log("=== SENDING TO BACKEND ===", formData);
+
     try {
       const response = await axios.post(
         'https://labphase-3.onrender.com/api/listings',
@@ -69,7 +72,7 @@ const Dashboard = () => {
         price: ''
       });
     } catch (error) {
-      console.error('=== FULL CREATE ERROR ===', error.response || error);
+      console.error('=== FULL CREATE ERROR ===', error.response?.data || error);
       const msg = error.response?.data?.message || error.message || "Error saving listing. Please try again.";
       alert(msg);
     }
@@ -111,29 +114,70 @@ const Dashboard = () => {
           <form onSubmit={handleCreateListing}>
             <div style={{ marginBottom: '15px' }}>
               <label style={{ display: 'block', marginBottom: '5px' }}>Material Type</label>
-              <select name="materialType" value={formData.materialType} onChange={handleInputChange}
-                style={{ width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }}>
+              <select 
+                name="materialType" 
+                value={formData.materialType} 
+                onChange={handleInputChange}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }}
+              >
                 <option value="Fertilizer">Fertilizer</option>
               </select>
             </div>
 
-            <input type="text" name="materialName" placeholder="DAP" value={formData.materialName} onChange={handleInputChange}
-              style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} required />
+            <input 
+              type="text" 
+              name="materialName" 
+              placeholder="DAP" 
+              value={formData.materialName}
+              onChange={handleInputChange}
+              style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} 
+              required 
+            />
 
-            <textarea name="description" placeholder="For mulching" value={formData.description} onChange={handleInputChange}
-              style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none', minHeight: '80px' }} required />
+            <textarea 
+              name="description" 
+              placeholder="For mulching" 
+              value={formData.description}
+              onChange={handleInputChange}
+              style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none', minHeight: '80px' }} 
+              required 
+            />
 
             <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
-              <input type="number" name="tons" placeholder="12" value={formData.tons} onChange={handleInputChange}
-                style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} required />
-              <input type="number" name="price" placeholder="1234" value={formData.price} onChange={handleInputChange}
-                style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} required />
+              <input 
+                type="number" 
+                name="tons" 
+                placeholder="12" 
+                value={formData.tons}
+                onChange={handleInputChange}
+                style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} 
+                required 
+              />
+              <input 
+                type="number" 
+                name="price" 
+                placeholder="1234" 
+                value={formData.price}
+                onChange={handleInputChange}
+                style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} 
+                required 
+              />
             </div>
 
-            <button type="submit" style={{
-              backgroundColor: '#e9edc9', color: '#062c1d', padding: '14px', width: '100%',
-              border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer'
-            }}>
+            <button 
+              type="submit"
+              style={{
+                backgroundColor: '#e9edc9', 
+                color: '#062c1d', 
+                padding: '14px', 
+                width: '100%',
+                border: 'none', 
+                borderRadius: '8px', 
+                fontWeight: 'bold', 
+                fontSize: '16px', 
+                cursor: 'pointer'
+              }}
+            >
               CREATE LISTING
             </button>
           </form>
@@ -144,14 +188,21 @@ const Dashboard = () => {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {listings.map((listing) => (
             <li key={listing._id} style={{ 
-              backgroundColor: '#0f3d2a', padding: '15px', marginBottom: '10px', borderRadius: '8px',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+              backgroundColor: '#0f3d2a', 
+              padding: '15px', 
+              marginBottom: '10px', 
+              borderRadius: '8px',
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center'
             }}>
               <span>
                 {listing.materialName} — {listing.tons} tons × KES {listing.price}
               </span>
-              <button onClick={() => deleteListing(listing._id)}
-                style={{ backgroundColor: '#c11212', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px' }}>
+              <button 
+                onClick={() => deleteListing(listing._id)}
+                style={{ backgroundColor: '#c11212', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px' }}
+              >
                 Delete
               </button>
             </li>

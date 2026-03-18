@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://labphase-3.onrender.com/api',
+baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 });
 
 // Attach the token automatically to every request

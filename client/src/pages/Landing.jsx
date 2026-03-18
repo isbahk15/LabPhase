@@ -4,6 +4,8 @@ import axios from 'axios'; // Added for the form submission
 import toast, { Toaster } from 'react-hot-toast'; // Added for feedback
 import Navbar from '../components/Navbar'; // Correct path to the new folderimport aboutImg from '../assets/About.jpg';
 import farmerImg from '../assets/farmer.jpg';
+// At the top of your file with other imports
+import aboutImg from '../assets/About.jpg'; // Make sure the path and filename are correct
 
 const Landing = () => {
   const navigate = useNavigate();

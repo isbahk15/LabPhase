@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from '../pages/Navbar';
+import Navbar from '../components/Navbar';
 
 const Dashboard = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Form state – matches your screenshot exactly
+  // Form state – exactly matches your screenshot
   const [formData, setFormData] = useState({
     materialType: 'Fertilizer',
-    name: '',           // "DAP"
-    description: '',    // "For mulching"
+    name: '',
+    description: '',
     quantity: '',
-    price: ''           // the two number fields
+    price: ''
   });
 
   useEffect(() => {
@@ -39,14 +39,13 @@ const Dashboard = () => {
     });
   };
 
-  // FIXED: This is the exact function that was missing / broken
+  // UPDATED: Now shows the REAL backend error instead of generic message
   const handleCreateListing = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem('token');
-
     if (!token) {
-      alert("Error saving listing. Please ensure you are logged in.");
+      alert("Please log in again.");
       return;
     }
 
@@ -62,9 +61,8 @@ const Dashboard = () => {
         }
       );
 
-      alert("Listing created successfully!");
+      alert("✅ Listing created successfully!");
       
-      // Add new listing to the top of the list instantly
       setListings([response.data, ...listings]);
       
       // Reset form
@@ -76,13 +74,19 @@ const Dashboard = () => {
         price: ''
       });
     } catch (error) {
-      console.error('Create error:', error.response?.data || error);
+      console.error('=== FULL ERROR FROM BACKEND ===', error.response || error);
       
-      if (error.response?.status === 401) {
-        alert("Error saving listing. Please ensure you are logged in.");
-      } else {
-        alert("Error saving listing. Please try again.");
+      let errorMessage = "Error saving listing. Please try again.";
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data) {
+        errorMessage = JSON.stringify(error.response.data);
+      } else if (error.message) {
+        errorMessage = error.message;
       }
+
+      alert(errorMessage);   // ← This will now show the exact error (e.g. "name is required")
     }
   };
 
@@ -96,7 +100,7 @@ const Dashboard = () => {
       setListings(listings.filter(item => item._id !== id));
     } catch (err) {
       console.error('Delete failed:', err);
-      alert("Delete failed (you can only delete your own listings)");
+      alert("Delete failed");
     }
   };
 
@@ -109,7 +113,7 @@ const Dashboard = () => {
 
         <h1 style={{ color: '#e9edc9', fontFamily: 'serif' }}>Merchant Dashboard</h1>
 
-        {/* NEW LISTING FORM – exact match to your screenshot */}
+        {/* New Listing Form - exact visual match */}
         <div style={{
           backgroundColor: '#0f3d2a',
           padding: '30px',
@@ -130,7 +134,6 @@ const Dashboard = () => {
                 style={{ width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }}
               >
                 <option value="Fertilizer">Fertilizer</option>
-                {/* Add more options here later if needed */}
               </select>
             </div>
 
@@ -193,7 +196,7 @@ const Dashboard = () => {
           </form>
         </div>
 
-        {/* Your existing listings */}
+        {/* Your Listings */}
         <h2 style={{ color: '#e9edc9' }}>Your Listings</h2>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {listings.map((listing) => (

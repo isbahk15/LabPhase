@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
+const auth = require('../middleware/authMiddleware'); // MATCHING YOUR FILENAME
 const Listing = require('../models/Listing');
 
 // @route   POST api/listings
@@ -9,9 +9,9 @@ router.post('/', auth, async (req, res) => {
   try {
     const { materialName, tons, description, price, location } = req.body;
 
-    // Check if variables are reaching here
+    // Check for required fields before saving
     if (!materialName || !tons) {
-        return res.status(400).json({ message: "Missing materialName or tons" });
+      return res.status(400).json({ message: "Please include material name and quantity in tons" });
     }
 
     const newListing = new Listing({

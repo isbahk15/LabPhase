@@ -6,7 +6,6 @@ const Dashboard = () => {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Form state – exactly matches your screenshot
   const [formData, setFormData] = useState({
     materialType: 'Fertilizer',
     name: '',
@@ -23,9 +22,9 @@ const Dashboard = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
         setListings(response.data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching listings:', error);
+      } finally {
         setLoading(false);
       }
     };
@@ -33,13 +32,9 @@ const Dashboard = () => {
   }, []);
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // UPDATED: Now shows the REAL backend error instead of generic message
   const handleCreateListing = async (e) => {
     e.preventDefault();
 
@@ -62,10 +57,8 @@ const Dashboard = () => {
       );
 
       alert("✅ Listing created successfully!");
-      
       setListings([response.data, ...listings]);
-      
-      // Reset form
+
       setFormData({
         materialType: 'Fertilizer',
         name: '',
@@ -74,19 +67,12 @@ const Dashboard = () => {
         price: ''
       });
     } catch (error) {
-      console.error('=== FULL ERROR FROM BACKEND ===', error.response || error);
+      console.error('=== FULL CREATE ERROR ===', error.response || error);
       
-      let errorMessage = "Error saving listing. Please try again.";
-      
-      if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.response?.data) {
-        errorMessage = JSON.stringify(error.response.data);
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      alert(errorMessage);   // ← This will now show the exact error (e.g. "name is required")
+      const msg = error.response?.data?.message || 
+                  error.message || 
+                  "Error saving listing. Please try again.";
+      alert(msg);
     }
   };
 
@@ -99,7 +85,6 @@ const Dashboard = () => {
       });
       setListings(listings.filter(item => item._id !== id));
     } catch (err) {
-      console.error('Delete failed:', err);
       alert("Delete failed");
     }
   };
@@ -113,7 +98,7 @@ const Dashboard = () => {
 
         <h1 style={{ color: '#e9edc9', fontFamily: 'serif' }}>Merchant Dashboard</h1>
 
-        {/* New Listing Form - exact visual match */}
+        {/* New Listing Form */}
         <div style={{
           backgroundColor: '#0f3d2a',
           padding: '30px',
@@ -127,70 +112,29 @@ const Dashboard = () => {
           <form onSubmit={handleCreateListing}>
             <div style={{ marginBottom: '15px' }}>
               <label style={{ display: 'block', marginBottom: '5px' }}>Material Type</label>
-              <select 
-                name="materialType" 
-                value={formData.materialType} 
-                onChange={handleInputChange}
-                style={{ width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }}
-              >
+              <select name="materialType" value={formData.materialType} onChange={handleInputChange}
+                style={{ width: '100%', padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }}>
                 <option value="Fertilizer">Fertilizer</option>
               </select>
             </div>
 
-            <input 
-              type="text" 
-              name="name" 
-              placeholder="DAP" 
-              value={formData.name}
-              onChange={handleInputChange}
-              style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }}
-              required
-            />
+            <input type="text" name="name" placeholder="DAP" value={formData.name} onChange={handleInputChange}
+              style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} required />
 
-            <textarea 
-              name="description" 
-              placeholder="For mulching" 
-              value={formData.description}
-              onChange={handleInputChange}
-              style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none', minHeight: '80px' }}
-              required
-            />
+            <textarea name="description" placeholder="For mulching" value={formData.description} onChange={handleInputChange}
+              style={{ width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none', minHeight: '80px' }} required />
 
             <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
-              <input 
-                type="number" 
-                name="quantity" 
-                placeholder="12" 
-                value={formData.quantity}
-                onChange={handleInputChange}
-                style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }}
-                required
-              />
-              <input 
-                type="number" 
-                name="price" 
-                placeholder="1234" 
-                value={formData.price}
-                onChange={handleInputChange}
-                style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }}
-                required
-              />
+              <input type="number" name="quantity" placeholder="12" value={formData.quantity} onChange={handleInputChange}
+                style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} required />
+              <input type="number" name="price" placeholder="1234" value={formData.price} onChange={handleInputChange}
+                style={{ flex: 1, padding: '12px', borderRadius: '8px', backgroundColor: '#1a4a38', color: 'white', border: 'none' }} required />
             </div>
 
-            <button 
-              type="submit"
-              style={{
-                backgroundColor: '#e9edc9',
-                color: '#062c1d',
-                padding: '14px',
-                width: '100%',
-                border: 'none',
-                borderRadius: '8px',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                cursor: 'pointer'
-              }}
-            >
+            <button type="submit" style={{
+              backgroundColor: '#e9edc9', color: '#062c1d', padding: '14px', width: '100%',
+              border: 'none', borderRadius: '8px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer'
+            }}>
               CREATE LISTING
             </button>
           </form>
@@ -201,21 +145,12 @@ const Dashboard = () => {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {listings.map((listing) => (
             <li key={listing._id} style={{ 
-              backgroundColor: '#0f3d2a', 
-              padding: '15px', 
-              marginBottom: '10px', 
-              borderRadius: '8px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
+              backgroundColor: '#0f3d2a', padding: '15px', marginBottom: '10px', borderRadius: '8px',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center'
             }}>
-              <span>
-                {listing.name || listing.materialType} — {listing.quantity} × KES {listing.price}
-              </span>
-              <button 
-                onClick={() => deleteListing(listing._id)}
-                style={{ backgroundColor: '#c11212', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px' }}
-              >
+              <span>{listing.name || listing.materialType} — {listing.quantity} × KES {listing.price}</span>
+              <button onClick={() => deleteListing(listing._id)}
+                style={{ backgroundColor: '#c11212', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px' }}>
                 Delete
               </button>
             </li>

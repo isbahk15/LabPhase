@@ -13,7 +13,8 @@ router.post('/', auth, async (req, res) => {
         await newListing.save();
         res.status(201).json(newListing);
     } catch (err) {
-        res.status(500).json({ message: "Error saving listing" });
+        console.error("=== CREATE LISTING ERROR ===", err);
+        res.status(500).json({ message: err.message || "Error saving listing" });
     }
 });
 
@@ -25,7 +26,8 @@ router.get('/', async (req, res) => {
       .sort({ createdAt: -1 });
     res.json(listings);
   } catch (err) {
-    res.status(500).json({ message: "Error fetching marketplace data" });
+    console.error("=== FETCH LISTINGS ERROR ===", err);
+    res.status(500).json({ message: err.message || "Error fetching marketplace data" });
   }
 });
 
@@ -36,51 +38,47 @@ router.get('/:id', async (req, res) => {
     if (!listing) return res.status(404).json({ message: "Listing not found" });
     res.json(listing);
   } catch (err) {
+    console.error("=== GET ONE LISTING ERROR ===", err);
     res.status(500).json({ message: err.message });
   }
 });
 
-// UPDATE Listing (Added - full CRUD now complete)
+// UPDATE Listing
 router.put('/:id', auth, async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
     if (!listing) return res.status(404).json({ message: "Listing not found" });
-
-    // Only the owner can update
     if (listing.user.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Unauthorized: You can only edit your own listings" });
+      return res.status(403).json({ message: "Unauthorized" });
     }
 
-    const updatedListing = await Listing.findByIdAndUpdate(
+    const updated = await Listing.findByIdAndUpdate(
       req.params.id,
       { ...req.body },
       { new: true, runValidators: true }
     ).populate('user', 'username');
 
-    res.json(updatedListing);
+    res.json(updated);
   } catch (err) {
-    res.status(500).json({ message: "Error updating listing" });
+    console.error("=== UPDATE LISTING ERROR ===", err);
+    res.status(500).json({ message: err.message || "Error updating listing" });
   }
 });
 
-// DELETE Listing - FIXED: Now properly enforces owner-only access
+// DELETE Listing
 router.delete('/:id', auth, async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
-    if (!listing) {
-      return res.status(404).json({ message: "Listing not found" });
-    }
-
-    // Only the owner can delete
+    if (!listing) return res.status(404).json({ message: "Listing not found" });
     if (listing.user.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Unauthorized: You can only delete your own listings" });
+      return res.status(403).json({ message: "Unauthorized" });
     }
 
     await listing.deleteOne();
     res.json({ message: "Listing deleted successfully" });
   } catch (err) {
-    console.error("Delete Error:", err);
-    res.status(500).json({ message: "Error deleting listing" });
+    console.error("=== DELETE LISTING ERROR ===", err);
+    res.status(500).json({ message: err.message || "Error deleting listing" });
   }
 });
 

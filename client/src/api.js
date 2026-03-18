@@ -1,11 +1,10 @@
 import axios from 'axios';
 
 const API = axios.create({
-  // Use your live Render URL
   baseURL: 'https://labphase-3.onrender.com/api',
 });
 
-// Automatically add token to headers if it exists
+// Attach the token automatically to every request
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem('token');
   if (token) {

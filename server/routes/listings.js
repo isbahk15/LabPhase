@@ -4,11 +4,14 @@ const Listing = require('../models/Listing');
 const auth = require('../middleware/authMiddleware');
 
 // CREATE Listing
+// CREATE Listing
 router.post('/', auth, async (req, res) => {
+    console.log("=== REQ.BODY RECEIVED FROM FRONTEND ===", JSON.stringify(req.body, null, 2));  // ← ADD THIS
+
     try {
         const newListing = new Listing({
             ...req.body,
-            merchant: req.user.id          // ← Changed from user to merchant
+            merchant: req.user.id
         });
         await newListing.save();
         res.status(201).json(newListing);

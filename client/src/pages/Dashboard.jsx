@@ -44,6 +44,13 @@ const Dashboard = () => {
       alert("Please log in again.");
       return;
     }
+    const payload = {
+        materialType: formData.materialType,
+        materialName: formData.materialName.trim(),
+        description: formData.description.trim(),
+        tons: parseFloat(formData.tons) || 0,
+        price: parseFloat(formData.price) || 0
+    };
 
     // Debug: see exactly what is being sent
     console.log("=== SENDING TO BACKEND ===", formData);

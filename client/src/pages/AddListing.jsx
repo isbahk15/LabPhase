@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import API from '../api'; 
 import Navbar from '../components/Navbar';
 
 const AddListing = () => {
@@ -18,21 +18,11 @@ const AddListing = () => {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      };
-      
-      // Use the live Render URL
-      await axios.post('https://labphase-3.onrender.com/api/listings', formData, config);
+      await API.post('/listings', formData);
       alert('Listing Posted Successfully!');
       setFormData({ materialName: '', tons: '', description: '', price: '', location: '' });
     } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Error creating listing';
-      alert(errorMsg);
+      alert(err.response?.data?.message || 'Error creating listing');
     }
   };
 
@@ -47,14 +37,14 @@ const AddListing = () => {
           <input style={inputStyle} type="number" placeholder="Price" name="price" value={price} onChange={onChange} />
           <input style={inputStyle} type="text" placeholder="Location" name="location" value={location} onChange={onChange} />
           <textarea style={inputStyle} placeholder="Description" name="description" value={description} onChange={onChange}></textarea>
-          <button style={btnStyle} type="submit">List Material</button>
+          <button style={btnStyle} type="submit">Post Listing</button>
         </form>
       </div>
     </div>
   );
 };
 
-const inputStyle = { width: '100%', padding: '12px', margin: '8px 0', borderRadius: '5px', border: 'none' };
+const inputStyle = { width: '100%', padding: '12px', margin: '8px 0', borderRadius: '5px', border: 'none', color: 'black' };
 const btnStyle = { width: '100%', padding: '12px', backgroundColor: '#e9edc9', color: '#062c1d', fontWeight: 'bold', border: 'none', cursor: 'pointer', marginTop: '10px' };
 
 export default AddListing;

@@ -72,10 +72,10 @@ const Dashboard = () => {
 
       // Reset form
       setFormData({
-        materialType: 'Fertilizer',
-        materialName: '',
+        type: 'Fertilizer',
+        name: '',
         description: '',
-        tons: '',
+        quantity: '',
         price: ''
       });
     } catch (error) {

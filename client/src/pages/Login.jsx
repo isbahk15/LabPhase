@@ -95,5 +95,6 @@ const inputStyle = { width: '100%', padding: '14px', background: 'rgba(255, 255,
 const buttonStyle = { width: '100%', marginTop: '10px', padding: '15px', backgroundColor: '#e9edc9', color: '#062c1d', border: 'none', borderRadius: '30px', fontWeight: 'bold', cursor: 'pointer' };
 const footerText = { marginTop: '25px', fontSize: '0.9rem', opacity: 0.8 };
 const linkStyle = { color: '#e9edc9', textDecoration: 'none', fontWeight: 'bold' };
+// testing
 
 export default Login;

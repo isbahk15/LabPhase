@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Added for button functionality
 import API from '../api';
 import Navbar from '../components/Navbar';
 
 const Marketplace = () => {
   const [items, setItems] = useState([]);
+  const navigate = useNavigate(); // Initialize navigation
 
   useEffect(() => {
     const getMarketData = async () => {
@@ -25,10 +27,18 @@ const Marketplace = () => {
         <div style={marketGrid}>
           {items.map(item => (
             <div key={item._id} style={marketCard}>
-              <h4>{item.materialName}</h4>
+              {/* Added fallback text to help debug if materialName is missing in DB */}
+              <h4>{item.materialName || "Unnamed Material"}</h4>
               <p>Location: {item.location || 'Not specified'}</p>
-              <p><strong>{item.tons} Tons</strong> @ ${item.price}/ton</p>
-              <button style={viewBtn}>View Details</button>
+              <p><strong>{item.tons || 0} Tons</strong> @ ${item.price || 0}/ton</p>
+              
+              {/* Updated button to navigate to a specific listing page */}
+              <button 
+                style={viewBtn} 
+                onClick={() => navigate(`/listing/${item._id}`)}
+              >
+                View Details
+              </button>
             </div>
           ))}
         </div>

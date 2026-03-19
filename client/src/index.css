@@ -131,4 +131,30 @@ h1, h2, h3 {
     grid-template-columns: repeat(3, 1fr); /* Three columns */
   }
 }
+/* Ensure the box model is consistent */
+* {
+  box-sizing: border-box;
+}
+
+/* Force the body to never be wider than the device */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* This stops the horizontal scroll */
+}
+
+/* Make images and videos scale to their containers */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Global Container for all pages */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px; /* Gives "breathing room" on mobile */
+}
 }

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const API = axios.create({
-baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  // This MUST be your Render URL, not localhost
+  baseURL: 'https://labphase-3.onrender.com/api', 
 });
 
-// Attach the token automatically to every request
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem('token');
   if (token) {

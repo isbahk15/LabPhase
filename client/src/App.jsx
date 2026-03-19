@@ -7,6 +7,7 @@ import Marketplace from './pages/Marketplace';
 import Dashboard from './pages/Dashboard';
 import ProductDetail from './pages/ProductDetail';
 import AddListing from './pages/AddListing'; 
+import ListingDetail from './pages/ListingDetail'; // Import the new file
 
 // It evaluates auth status and role permissions before allowing navigation.
 const ProtectedRoute = ({ children, allowClient = true }) => {
@@ -49,6 +50,16 @@ function App() {
           } 
         />
         
+        {/* New Route for viewing specific listing details */}
+        <Route 
+          path="/listing/:id" 
+          element={
+            <ProtectedRoute allowClient={true}>
+              <ListingDetail />
+            </ProtectedRoute>
+          } 
+        />
+
         <Route 
           path="/product/:id" 
           element={

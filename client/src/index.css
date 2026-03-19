@@ -99,4 +99,36 @@ h1, h2, h3 {
   scroll-behavior: smooth !important;
 }
 /* this enable the scrolling on the pages to be smooth rather than "laging" */
+/* 1. Base Styles (Mobile Default) */
+.container {
+  width: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically on mobile */
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* One column on phones */
+  gap: 15px;
+}
+
+/* 2. Tablets (Screens wider than 768px) */
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row; /* Side-by-side on tablets */
+    padding: 30px;
+  }
+  
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr); /* Two columns */
+  }
+}
+
+/* 3. Desktops (Screens wider than 1024px) */
+@media (min-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr); /* Three columns */
+  }
+}
 }

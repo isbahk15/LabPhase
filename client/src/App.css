@@ -1,3 +1,8 @@
+/**
+ * ROOT CONTAINER
+ * Sets the maximum width of the app and centers it on the screen.
+ * '2rem' padding provides a consistent gutter on mobile devices.
+ */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -5,19 +10,33 @@
   text-align: center;
 }
 
+/**
+ * LOGO STYLING & ANIMATIONS
+ * 'will-change: filter' tells the browser to optimize for performance 
+ * before the hover effect (drop-shadow) triggers.
+ */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
+/* Hover effects for logos - uses drop-shadow for a glowing look */
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
+/* Specific blue glow for the React logo */
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+/**
+ * LOGO SPIN ANIMATION
+ * Rotates the logo 360 degrees. 
+ * Often used on the React logo in the Vite boilerplate.
+ */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -27,6 +46,8 @@
   }
 }
 
+/* Accessibility Check: Only plays the animation if the user hasn't 
+   enabled "Reduce Motion" in their system settings. */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -40,36 +61,44 @@
 .read-the-docs {
   color: #888;
 }
+
+/**
+ * DASHBOARD UTILITIES
+ * dash-row: Used for table rows or list items in the Merchant Dashboard.
+ * Provides a subtle highlight when the user points at a listing.
+ */
 .dash-row:hover {
   background-color: rgba(255, 255, 255, 0.03);
 }
 
+/**
+ * DELETE BUTTONS
+ * Uses '!important' to override inline styles if necessary.
+ * Changes color to red and grows slightly (scale) to warn the user 
+ * that they are about to perform a destructive action.
+ */
 .delete-btn-aesthetic:hover {
   background-color: #ff6b6b !important;
   color: white !important;
   transform: scale(1.05);
 }
 
-/* For your Modal Inputs */
-
-.dash-row:hover {
-  background-color: rgba(255, 255, 255, 0.03);
-}
-
-.delete-btn-aesthetic:hover {
-  background-color: #ff6b6b !important;
-  color: white !important;
-}
-
+/**
+ * AUTHENTICATION INPUTS
+ * Styled for a "Dark Mode" aesthetic.
+ * Uses a semi-transparent background (glassmorphism) and subtle borders.
+ */
 .auth-input {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(233, 237, 201, 0.2);
   padding: 15px;
   border-radius: 10px;
   color: white;
-  outline: none;
+  outline: none; /* Removes the default blue browser outline */
+  transition: border-color 0.2s;
 }
 
+/* Focus State: Provides a visual cue when the user clicks into an input field */
 .auth-input:focus {
-  border-color: #a7c957;
+  border-color: #a7c957; /* Matches your theme's green accents */
 }

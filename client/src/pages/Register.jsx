@@ -22,7 +22,7 @@ const Register = () => {
       //the API call to send the entire form data object to our backend
       // Updated to correct production auth endpoint
       const response = await axios.post(
-        "https://labphase-2.onrender.com/api/auth/register",
+        "https://labphase-3.onrender.com/api/auth/register",
         formData,
       );
 

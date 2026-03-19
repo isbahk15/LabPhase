@@ -1,4 +1,4 @@
-// DNS Configuration: for my device because it was preventing a connection
+// DNS Configuration
 const dns = require('node:dns/promises');
 dns.setServers(['1.1.1.1', '1.0.0.1', '8.8.8.8']);
 
@@ -9,24 +9,21 @@ require('dotenv').config();
 
 const app = express();
 
+// 🚨 NEW: Catch crashes so we can see the real error
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ UNHANDLED REJECTION:', reason);
+});
+process.on('uncaughtException', (err) => {
+    console.error('❌ UNCAUGHT EXCEPTION:', err);
+});
+
 // 1. Connect to MongoDB
 connectDB(); 
 
-// 2. Middleware
-// ✅ SMART CORS: Allows ALL Vercel preview URLs (*.vercel.app) + localhost
-// No more manual updates every time Vercel creates a new preview!
+// 2. Middleware - Smart CORS
 app.use(cors({
     origin: function (origin, callback) {
-        const allowedOrigins = [
-            'https://lab-phase-whgr.vercel.app',
-            'https://lab-phase-whgr-hc89q9c2s-isbahs-projects-59c0c0f4.vercel.app',
-            'http://localhost:5173'
-        ];
-
-        // Allow any Vercel preview or production domain
-        if (!origin || 
-            allowedOrigins.includes(origin) || 
-            /\.vercel\.app$/.test(origin)) {
+        if (!origin || /\.vercel\.app$/.test(origin) || origin === 'http://localhost:5173') {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
@@ -46,7 +43,7 @@ app.use('/api/merchant', require('./routes/merchant'));
 app.use('/api/listings', require('./routes/listings')); 
 app.use('/api/contacts', require('./routes/contacts')); 
 
-// Health check endpoint
+// Health check
 app.get('/', (req, res) => {
     res.send('AgroLoop API is running...');
 });
@@ -56,4 +53,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 AgroLoop Server running on port ${PORT}`);
 });
-// testing commit
